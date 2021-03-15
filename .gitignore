@@ -1,3 +1,4 @@
+src/main/resources/hibernateContext.xml
 *.class
 
 # Mobile Tools for Java (J2ME)
