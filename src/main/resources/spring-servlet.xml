@@ -24,4 +24,6 @@
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/js/**" location="/js/" />
     <mvc:resources mapping="/fonts/**" location="/fonts/" />
+    <!--Recursos para la plantilla argon-->
+    <mvc:resources mapping="/assets/**" location="/assets/" />
 </beans>
