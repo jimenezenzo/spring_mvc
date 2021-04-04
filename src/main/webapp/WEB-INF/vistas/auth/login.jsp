@@ -103,14 +103,21 @@
                             </div>
                         </div>
                     </c:if>
+                    <c:if test="${not empty message}">
+                        <div class="card-header border-0">
+                            <div class="alert alert-success" role="alert">
+                                    ${message}
+                            </div>
+                        </div>
+                    </c:if>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <form:form action="validar-login" method="POST" modelAttribute="usuario">
+                        <form action="${pageContext.request.contextPath}/login" method="POST">
                             <div class="form-group mb-3">
                                 <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                     </div>
-                                    <form:input path="email" class="form-control" placeholder="Email" type="email"/>
+                                    <input class="form-control" placeholder="Email" type="email" name="username">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -118,7 +125,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <form:input path="password" class="form-control" placeholder="Password" type="password"/>
+                                    <input class="form-control" placeholder="Password" type="password" name="password">
                                 </div>
                             </div>
                             <div class="custom-control custom-control-alternative custom-checkbox">
@@ -130,7 +137,7 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary my-4">Ingresar</button>
                             </div>
-                        </form:form>
+                        </form>
                     </div>
                 </div>
                 <div class="row mt-3">

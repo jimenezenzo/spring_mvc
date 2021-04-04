@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class ControladorLogin {
 	}
 
 	// Este metodo escucha la URL localhost:8080/NOMBRE_APP/login si la misma es invocada por metodo http GET
-	@RequestMapping("/login")
+	/*@RequestMapping("/login")
 	public ModelAndView irALogin() {
 
 		ModelMap modelo = new ModelMap();
@@ -39,12 +40,12 @@ public class ControladorLogin {
 		// Se va a la vista login (el nombre completo de la lista se resuelve utilizando el view resolver definido en el archivo spring-servlet.xml)
 		// y se envian los datos a la misma  dentro del modelo
 		return new ModelAndView("auth/login", modelo);
-	}
+	}*/
 
 	// Este metodo escucha la URL validar-login siempre y cuando se invoque con metodo http POST
 	// El método recibe un objeto Usuario el que tiene los datos ingresados en el form correspondiente y se corresponde con el modelAttribute definido en el
 	// tag form:form
-	@RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+	/*@RequestMapping(path = "/validar-login", method = RequestMethod.POST)
 	public ModelAndView validarLogin(@ModelAttribute("usuario") Usuario usuario, HttpServletRequest request) {
 		ModelMap model = new ModelMap();
 
@@ -59,7 +60,7 @@ public class ControladorLogin {
 			model.put("error", "Usuario o clave incorrecta");
 		}
 		return new ModelAndView("auth/login", model);
-	}
+	}*/
 
 	// Escucha la URL /home por GET, y redirige a una vista.
 	@RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -71,6 +72,22 @@ public class ControladorLogin {
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView inicio() {
 		return new ModelAndView("redirect:/login");
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error,
+								  @RequestParam(value = "logout", required = false) String logout) {
+
+		ModelMap model = new ModelMap();
+		if (error != null) {
+			model.put("error", "Usuario o clave incorrecta");
+		}
+
+		if (logout != null) {
+			model.put("message", "Cerraste sesion correctamente");
+		}
+
+		return new ModelAndView("auth/login", model);
 	}
 
 }
