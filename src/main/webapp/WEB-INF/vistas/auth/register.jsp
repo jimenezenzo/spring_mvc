@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -16,14 +18,14 @@
     <meta name="author" content="Creative Tim">
     <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
     <!-- Favicon -->
-    <link href="assets/img/brand/favicon.png" rel="icon" type="image/png">
+    <link href="${pageContext.request.contextPath}/assets/img/brand/favicon.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
-    <link href="assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
-    <link href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <!-- Argon CSS -->
-    <link type="text/css" href="assets/css/argon.css?v=1.0.0" rel="stylesheet">
+    <link type="text/css" href="${pageContext.request.contextPath}/assets/css/argon.css?v=1.0.0" rel="stylesheet">
 </head>
 
 <body class="bg-default">
@@ -32,7 +34,7 @@
     <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
         <div class="container px-4">
             <a class="navbar-brand" href="../index.html">
-                <img src="assets/img/brand/white.png" />
+                <img src="${pageContext.request.contextPath}/assets/img/brand/white.png" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -43,7 +45,7 @@
                     <div class="row">
                         <div class="col-6 collapse-brand">
                             <a href="../index.html">
-                                <img src="assets/img/brand/blue.png">
+                                <img src="${pageContext.request.contextPath}/assets/img/brand/blue.png">
                             </a>
                         </div>
                         <div class="col-6 collapse-close">
@@ -96,34 +98,44 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
+                    <c:if test="${not empty message}">
+                        <div class="card-header border-0">
+                            <div class="alert alert-success" role="alert">
+                                    ${message}
+                            </div>
+                        </div>
+                    </c:if>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
                             <small>Or sign up with credentials</small>
                         </div>
-                        <form role="form">
+                        <form:form role="form" action="${pageContext.request.contextPath}/registro/store" method="post" modelAttribute="usuario">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="Name" type="text">
+                                    <form:input path="name" class="form-control" cssErrorClass="form-control border-danger" placeholder="Name" type="text"/>
                                 </div>
+                                <small><form:errors path="name" cssClass="text-danger"/></small>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="Email" type="email">
+                                    <form:input path="email" cssErrorClass="form-control border-danger" class="form-control" placeholder="Email" type="text"/>
                                 </div>
+                                <small><form:errors path="email" cssClass="text-danger" /></small>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <input class="form-control" placeholder="Password" type="password">
+                                    <form:input path="password" class="form-control" placeholder="Password" type="password"/>
                                 </div>
+                                <small><form:errors path="password" cssClass="text-danger" /></small>
                             </div>
                             <div class="text-muted font-italic"><small>password strength: <span class="text-success font-weight-700">strong</span></small></div>
                             <div class="row my-4">
@@ -137,9 +149,9 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-primary mt-4">Create account</button>
+                                <button type="submit" class="btn btn-primary mt-4">Registrar</button>
                             </div>
-                        </form>
+                        </form:form>
                     </div>
                 </div>
             </div>
@@ -176,10 +188,10 @@
 </footer>
 <!-- Argon Scripts -->
 <!-- Core -->
-<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Argon JS -->
-<script src="assets/js/argon.js?v=1.0.0"></script>
+<script src="${pageContext.request.contextPath}/assets/js/argon.js?v=1.0.0"></script>
 </body>
 
 </html>

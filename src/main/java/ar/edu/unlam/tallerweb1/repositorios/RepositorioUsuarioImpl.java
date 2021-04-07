@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -44,6 +45,14 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		return (Usuario) session.createCriteria(Usuario.class)
 				.add(Restrictions.eq("email", email))
 				.uniqueResult();
+	}
+
+	@Override
+	public void createUser(Usuario usuario) {
+		final Session session = sessionFactory.getCurrentSession();
+		usuario.setRol("user");
+		usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
+		session.save(usuario);
 	}
 
 }

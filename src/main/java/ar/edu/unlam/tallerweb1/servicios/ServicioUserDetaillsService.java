@@ -24,7 +24,7 @@ public class ServicioUserDetaillsService implements UserDetailsService {
         if (usuario != null){
 
             return org.springframework.security.core.userdetails.
-                    User.withUsername(usuario.getEmail())
+                    User.withUsername(usuario.getName())
                     .password(usuario.getPassword())
                     .roles(usuario.getRol()).build();
         }

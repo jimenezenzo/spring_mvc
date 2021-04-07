@@ -8,4 +8,6 @@ public interface RepositorioUsuario {
 	Usuario consultarUsuario (Usuario usuario);
 
 	Usuario userByEmail (String email);
+
+	void createUser(Usuario usuario);
 }

@@ -27,7 +27,7 @@ public class ConfiguracionSpringSecurity extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/assets/**").permitAll()
-                .antMatchers("/", "/login", "/registro").permitAll()
+                .antMatchers("/", "/login", "/registro/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

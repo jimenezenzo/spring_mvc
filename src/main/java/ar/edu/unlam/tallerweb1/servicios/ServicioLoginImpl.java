@@ -36,4 +36,9 @@ public class ServicioLoginImpl implements ServicioLogin {
 		return servicioLoginDao.userByEmail(email);
 	}
 
+	@Override
+	public void createUsuario(Usuario usuario) {
+		servicioLoginDao.createUser(usuario);
+	}
+
 }
