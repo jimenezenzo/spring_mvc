@@ -105,6 +105,13 @@
                             </div>
                         </div>
                     </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="card-header border-0">
+                            <div class="alert alert-danger" role="alert">
+                                    ${error}
+                            </div>
+                        </div>
+                    </c:if>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">
                             <small>Or sign up with credentials</small>
