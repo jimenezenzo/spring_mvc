@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.Paciente;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,8 @@ import javax.validation.Valid;
 @Controller
 public class ControladorRegistro {
 
-    private ServicioLogin servicioLogin;
-
     @Autowired
-    public ControladorRegistro(ServicioLogin servicioLogin){
-        this.servicioLogin = servicioLogin;
-    }
+    private ServicioLogin servicioLogin;
 
     @RequestMapping("/registro")
     public ModelAndView irARegistro(@RequestParam(value = "message", required = false) String message){
@@ -29,16 +26,18 @@ public class ControladorRegistro {
         if (message != null){
             model.put("message", message);
         }
-        model.put("usuario", new Usuario());
+        model.put("paciente", new Paciente());
 
         return new ModelAndView("auth/register", model);
     }
 
     @RequestMapping("/registro/store")
-    public ModelAndView store(@Valid Usuario user, BindingResult result){
+    public ModelAndView store(Paciente paciente){
         ModelMap model = new ModelMap();
 
-        if (result.hasErrors()){
+        /*servicioLogin.consultarUsuarioEmail()*/
+
+        /*if (result.hasErrors()){
             model.put("usuario", user);
             return new ModelAndView("auth/register", model);
         }
@@ -47,7 +46,7 @@ public class ControladorRegistro {
             return new ModelAndView("auth/register", model);
         }
 
-        servicioLogin.createUsuario(user);
+        servicioLogin.createUsuario(user);*/
         model.put("message", "Usuario creado correctamente");
         return new ModelAndView("redirect:/registro", model);
     }

@@ -19,12 +19,8 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 @Transactional
 public class ServicioLoginImpl implements ServicioLogin {
 
-	private RepositorioUsuario servicioLoginDao;
-
 	@Autowired
-	public ServicioLoginImpl(RepositorioUsuario servicioLoginDao){
-		this.servicioLoginDao = servicioLoginDao;
-	}
+	private RepositorioUsuario servicioLoginDao;
 
 	@Override
 	public Usuario consultarUsuario (Usuario usuario) {

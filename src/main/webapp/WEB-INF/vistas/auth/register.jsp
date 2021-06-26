@@ -116,15 +116,15 @@
                         <div class="text-center text-muted mb-4">
                             <small>Or sign up with credentials</small>
                         </div>
-                        <form:form role="form" action="${pageContext.request.contextPath}/registro/store" method="post" modelAttribute="usuario">
+                        <form:form role="form" action="${pageContext.request.contextPath}/registro/store" method="post" modelAttribute="paciente">
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                     </div>
-                                    <form:input path="name" class="form-control" cssErrorClass="form-control border-danger" placeholder="Name" type="text"/>
+                                    <form:input path="numeroAfiliado" class="form-control" cssErrorClass="form-control border-danger" placeholder="Name" type="text"/>
                                 </div>
-                                <small><form:errors path="name" cssClass="text-danger"/></small>
+                                <small><form:errors path="numeroAfiliado" cssClass="text-danger"/></small>
                             </div>
                             <div class="form-group">
                                 <div class="input-group input-group-alternative mb-3">
