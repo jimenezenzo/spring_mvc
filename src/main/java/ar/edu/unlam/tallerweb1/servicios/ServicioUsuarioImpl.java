@@ -1,16 +1,21 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.excepciones.EmailPacienteException;
-import ar.edu.unlam.tallerweb1.excepciones.PacienteNoEncontradoException;
-import ar.edu.unlam.tallerweb1.excepciones.PacienteRegistradoException;
+import ar.edu.unlam.tallerweb1.excepciones.*;
+import ar.edu.unlam.tallerweb1.modelo.Medico;
 import ar.edu.unlam.tallerweb1.modelo.Paciente;
+import ar.edu.unlam.tallerweb1.modelo.Persona;
+import ar.edu.unlam.tallerweb1.modelo.datos.DatosAltaUsuario;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioPersona;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+
+import java.time.LocalDate;
 
 // Implelemtacion del Servicio de usuarios, la anotacion @Service indica a Spring que esta clase es un componente que debe
 // ser manejado por el framework, debe indicarse en applicationContext que busque en el paquete ar.edu.unlam.tallerweb1.servicios
@@ -22,8 +27,14 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 @Transactional
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
-	@Autowired
 	private RepositorioUsuario repositorioUsuario;
+	private RepositorioPersona repositorioPersona;
+
+	@Autowired
+	public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioPersona repositorioPersona){
+		this.repositorioUsuario = repositorioUsuario;
+		this.repositorioPersona = repositorioPersona;
+	}
 
 	@Override
 	public Usuario consultarUsuarioEmail(String email) {
@@ -34,16 +45,50 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 	public void registrarPaciente(Paciente paciente){
 		Paciente pacienteEncontrado = this.repositorioUsuario.obtenerPacientePorNumeroAfiliado(paciente.getNumeroAfiliado());
 		if (pacienteEncontrado == null)
-			throw new PacienteNoEncontradoException();
+			throw new PacienteNoEncontradoException("El numero de afiliado no es correcto");
 
-		if (!pacienteEncontrado.getPassword().isEmpty())
-			throw new PacienteRegistradoException();
+		if (pacienteEncontrado.getPassword() != null)
+			throw new PacienteRegistradoException("El afiliado ya se encuentra registrado");
 
 		if (!pacienteEncontrado.getEmail().equals(paciente.getEmail()))
-			throw new EmailPacienteException();
+			throw new EmailPacienteException("El email ingresado no se encuentra en el sistema");
 
 		pacienteEncontrado.setPassword(new BCryptPasswordEncoder().encode(paciente.getPassword()));
 		this.repositorioUsuario.registrarPaciente(pacienteEncontrado);
+	}
+
+	@Override
+	public void altaUsuario(DatosAltaUsuario datosAltaUsuario) {
+		if (this.repositorioPersona.consultarPersonaPorTipoYNumero(datosAltaUsuario.getTipoDocumento(), datosAltaUsuario.getNumeroDocumento()) != null)
+			throw new UsuarioRegistradoException("El usuario ya se encuentra registrado");
+
+		if (this.repositorioUsuario.userByEmail(datosAltaUsuario.getEmail()) != null)
+			throw new EmailExistenteException("El email ya se encuentra en uso");
+
+		Persona persona = new Persona();
+		persona.setTipoDocumento(datosAltaUsuario.getTipoDocumento());
+		persona.setNumeroDocumento(datosAltaUsuario.getNumeroDocumento());
+		persona.setNombre(datosAltaUsuario.getNombre());
+		persona.setApellido(datosAltaUsuario.getApellido());
+		persona.setSexo(datosAltaUsuario.getSexo());
+		persona.setFechaNacimiento(LocalDate.parse(datosAltaUsuario.getFechaNacimiento()));
+
+		if (datosAltaUsuario.getRol().equals("Paciente")){
+			Paciente paciente = new Paciente();
+			paciente.setPersona(persona);
+			paciente.setEmail(datosAltaUsuario.getEmail());
+			paciente.setRol(datosAltaUsuario.getRol());
+			paciente.setNumeroAfiliado(datosAltaUsuario.getNumeroAfiliado());
+			this.repositorioUsuario.registrarAltaUsuario(paciente);
+		}
+		else{
+			Medico medico = new Medico();
+			medico.setPersona(persona);
+			medico.setEmail(datosAltaUsuario.getEmail());
+			medico.setRol(datosAltaUsuario.getRol());
+			medico.setMatricula(datosAltaUsuario.getMatricula());
+			this.repositorioUsuario.registrarAltaUsuario(medico);
+		}
 	}
 
 }

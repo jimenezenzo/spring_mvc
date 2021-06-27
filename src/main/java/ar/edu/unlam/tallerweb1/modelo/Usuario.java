@@ -21,14 +21,9 @@ public class Usuario {
 	// para el resto de los atributo no se usan anotaciones entonces se usa el default de hibernate: la columna se llama igual que
 	// el atributo, la misma admite nulos, y el tipo de dato se deduce del tipo de dato de java.
 
-	@Email(message = "El campo debe ser tipo email")
-	@NotBlank(message = "El campo email es obligatorio")
 	private String email;
-
-	@NotBlank(message = "El campo password es obligatorio")
 	private String password;
-
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Persona persona;
 
 	private String rol;
@@ -59,6 +54,14 @@ public class Usuario {
 	}
 	public void setRol(String rol) {
 		this.rol = rol;
+	}
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
 	}
 
 	@Override

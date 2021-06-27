@@ -37,11 +37,10 @@ public class ControladorRegistro {
             servicioUsuario.registrarPaciente(paciente);
         }
         catch (RuntimeException e){
-            model.put("error", "Hubo un error al registrar");
+            model.put("error", e.getMessage());
             return new ModelAndView("auth/register", model);
         }
 
-        model.put("message", "Usuario creado correctamente");
-        return new ModelAndView("redirect:/registro", model);
+        return new ModelAndView("redirect:/login?success", model);
     }
 }

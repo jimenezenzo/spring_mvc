@@ -49,4 +49,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		session.update(paciente);
 	}
 
+	@Override
+	public void registrarAltaUsuario(Usuario usuario) {
+		final Session session = sessionFactory.getCurrentSession();
+		session.save(usuario);
+	}
+
 }
