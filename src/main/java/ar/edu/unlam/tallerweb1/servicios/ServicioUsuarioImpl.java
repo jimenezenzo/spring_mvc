@@ -1,8 +1,11 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import javax.inject.Inject;
-
+import ar.edu.unlam.tallerweb1.excepciones.EmailPacienteException;
+import ar.edu.unlam.tallerweb1.excepciones.PacienteNoEncontradoException;
+import ar.edu.unlam.tallerweb1.excepciones.PacienteRegistradoException;
+import ar.edu.unlam.tallerweb1.modelo.Paciente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,24 +20,30 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 // en hibernateCOntext.xml. De esta manera todos los metodos de cualquier dao invocados dentro de un servicio se ejecutan en la misma transaccion
 @Service("servicioLogin")
 @Transactional
-public class ServicioLoginImpl implements ServicioLogin {
+public class ServicioUsuarioImpl implements ServicioUsuario {
 
 	@Autowired
-	private RepositorioUsuario servicioLoginDao;
-
-	@Override
-	public Usuario consultarUsuario (Usuario usuario) {
-		return servicioLoginDao.consultarUsuario(usuario);
-	}
+	private RepositorioUsuario repositorioUsuario;
 
 	@Override
 	public Usuario consultarUsuarioEmail(String email) {
-		return servicioLoginDao.userByEmail(email);
+		return repositorioUsuario.userByEmail(email);
 	}
 
 	@Override
-	public void createUsuario(Usuario usuario) {
-		servicioLoginDao.createUser(usuario);
+	public void registrarPaciente(Paciente paciente){
+		Paciente pacienteEncontrado = this.repositorioUsuario.obtenerPacientePorNumeroAfiliado(paciente.getNumeroAfiliado());
+		if (pacienteEncontrado == null)
+			throw new PacienteNoEncontradoException();
+
+		if (!pacienteEncontrado.getPassword().isEmpty())
+			throw new PacienteRegistradoException();
+
+		if (!pacienteEncontrado.getEmail().equals(paciente.getEmail()))
+			throw new EmailPacienteException();
+
+		pacienteEncontrado.setPassword(new BCryptPasswordEncoder().encode(paciente.getPassword()));
+		this.repositorioUsuario.registrarPaciente(pacienteEncontrado);
 	}
 
 }

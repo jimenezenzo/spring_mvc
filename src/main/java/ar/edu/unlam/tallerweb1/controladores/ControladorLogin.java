@@ -1,30 +1,26 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.servicios.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ControladorLogin {
 
 	// La anotacion @Autowired indica a Spring que se debe utilizar el contructor como mecanismo de inyección de dependencias,
 	// es decir, qeue lo parametros del mismo deben ser un bean de spring y el framewrok automaticamente pasa como parametro
-	// el bean correspondiente, en este caso, un objeto de una clase que implemente la interface ServicioLogin,
+	// el bean correspondiente, en este caso, un objeto de una clase que implemente la interface ServicioUsuario,
 	// dicha clase debe estar anotada como @Service o @Repository y debe estar en un paquete de los indicados en
 	// applicationContext.xml
-	private ServicioLogin servicioLogin;
+	private ServicioUsuario servicioLogin;
 
 	@Autowired
-	public ControladorLogin(ServicioLogin servicioLogin){
+	public ControladorLogin(ServicioUsuario servicioLogin){
 		this.servicioLogin = servicioLogin;
 	}
 

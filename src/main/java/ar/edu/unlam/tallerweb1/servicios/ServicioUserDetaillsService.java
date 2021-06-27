@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicioUserDetaillsService implements UserDetailsService {
 
-    private ServicioLogin servicioLogin;
+    private ServicioUsuario servicioLogin;
 
     @Autowired
-    public ServicioUserDetaillsService(ServicioLogin servicioLogin){
+    public ServicioUserDetaillsService(ServicioUsuario servicioLogin){
         this.servicioLogin = servicioLogin;
     }
 

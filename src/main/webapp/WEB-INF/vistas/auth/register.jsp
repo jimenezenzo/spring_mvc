@@ -122,7 +122,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                     </div>
-                                    <form:input path="numeroAfiliado" class="form-control" cssErrorClass="form-control border-danger" placeholder="Name" type="text"/>
+                                    <form:input path="numeroAfiliado" class="form-control" cssErrorClass="form-control border-danger" placeholder="Numero afiliado" type="text"/>
                                 </div>
                                 <small><form:errors path="numeroAfiliado" cssClass="text-danger"/></small>
                             </div>
