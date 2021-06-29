@@ -2,9 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.configuraciones.SendEmail;
 import ar.edu.unlam.tallerweb1.excepciones.*;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
-import ar.edu.unlam.tallerweb1.modelo.Paciente;
-import ar.edu.unlam.tallerweb1.modelo.Persona;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosAltaUsuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPersona;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 import java.time.LocalDate;
 
