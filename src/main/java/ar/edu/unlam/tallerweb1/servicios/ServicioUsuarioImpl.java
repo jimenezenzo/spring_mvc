@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.configuraciones.SendEmail;
 import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Medico;
 import ar.edu.unlam.tallerweb1.modelo.Paciente;
@@ -30,10 +31,16 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 	private RepositorioUsuario repositorioUsuario;
 	private RepositorioPersona repositorioPersona;
 
+	private final String urlRegistroPaciente = "http://localhost:8080/proyecto_limpio_spring_war_exploded/registro";
+
 	@Autowired
 	public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioPersona repositorioPersona){
 		this.repositorioUsuario = repositorioUsuario;
 		this.repositorioPersona = repositorioPersona;
+	}
+
+	public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
+		this.repositorioUsuario = repositorioUsuario;
 	}
 
 	@Override
@@ -55,6 +62,19 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
 		pacienteEncontrado.setPassword(new BCryptPasswordEncoder().encode(paciente.getPassword()));
 		this.repositorioUsuario.registrarPaciente(pacienteEncontrado);
+
+
+	}
+
+	public void enviarEmailDeRegistroExitoso(Paciente paciente) {
+		String subject = "Registro exitoso La clinica";
+
+		String cuerpoDelEmail = "Le informamos que su numero de afiliado es: " + paciente.getNumeroAfiliado() +
+				" Por favor utilicelo para darse de alta como usuario en el siguiente link: " + urlRegistroPaciente;
+
+		String email = paciente.getEmail();
+		SendEmail sendEmail = new SendEmail();
+		sendEmail.SendSimpleEmail(subject, cuerpoDelEmail, email);
 	}
 
 	@Override
@@ -80,6 +100,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 			paciente.setRol(datosAltaUsuario.getRol());
 			paciente.setNumeroAfiliado(datosAltaUsuario.getNumeroAfiliado());
 			this.repositorioUsuario.registrarAltaUsuario(paciente);
+			this.enviarEmailDeRegistroExitoso(paciente);
 		}
 		else{
 			Medico medico = new Medico();
