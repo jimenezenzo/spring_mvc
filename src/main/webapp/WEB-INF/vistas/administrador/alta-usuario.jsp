@@ -41,7 +41,7 @@
                         <div class="text-center text-muted my-2">
                             <small>Ingrese los datos personales</small>
                         </div>
-                        <form:form role="form" action="${pageContext.request.contextPath}/admin/registrar-paciente" method="post" modelAttribute="datosAltaUsuario">
+                        <form:form role="form" action="${pageContext.request.contextPath}/administrador/registrar-paciente" method="post" modelAttribute="datosAltaUsuario">
                             <div class="d-flex">
                                 <div class="form-group col-6">
                                     <div class="input-group input-group-alternative mb-3">

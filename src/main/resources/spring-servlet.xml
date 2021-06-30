@@ -16,7 +16,7 @@
         <property name="prefix" value="/WEB-INF/vistas/" />
         <!--Con esto agrega al final .jsp el nombre de vista recibido-->
         <property name="suffix" value=".jsp" />
-        <!--De esta manera al devolver home como nombre de vista, resuelve /WEB-INF/vistas/home.jsp-->
+        <!--De esta manera al devolver home como nombre de vista, resuelve /WEB-INF/vistas/home-administrador.jsp-->
     </bean>
 
     <!--Excluye de las URL validas para Spring MVC los recursos estaticos de la aplicacion Web: estilos, java script y fuentes-->

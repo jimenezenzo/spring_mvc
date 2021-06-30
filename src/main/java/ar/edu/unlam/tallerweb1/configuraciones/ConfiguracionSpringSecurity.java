@@ -8,13 +8,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class ConfiguracionSpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -26,13 +30,16 @@ public class ConfiguracionSpringSecurity extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/assets/**").permitAll()
-                .antMatchers("/", "/login", "/registro/**").permitAll()
+                .antMatchers("/assets/**", "/css/**", "/fonts/**", "/js/**").permitAll()
+                .antMatchers("/", "/login", "/registro/**" ,"/registro-medico/**").permitAll()
+                .antMatchers("/paciente/**").hasRole("Paciente")
+                .antMatchers("/medico/**").hasRole("Medico")
+                .antMatchers("/administrador/**").hasRole("Administrador")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/home")
+                .successHandler(authenticationSuccessHandler)
                 .failureUrl("/login?error")
                 .usernameParameter("username").passwordParameter("password")
                 .and()

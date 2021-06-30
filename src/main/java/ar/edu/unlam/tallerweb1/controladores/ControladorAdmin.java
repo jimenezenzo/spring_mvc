@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Arrays;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/administrador")
 public class ControladorAdmin {
 
     private ServicioUsuario servicioUsuario;
@@ -23,7 +23,13 @@ public class ControladorAdmin {
         this.servicioUsuario = servicioUsuario;
     }
 
-    @RequestMapping("altas-usuario")
+    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    public ModelAndView irAHomeMedico()
+    {
+        return new ModelAndView("home/home-administrador");
+    }
+
+    @RequestMapping("/altas-usuario")
     public ModelAndView irAAltaUsuario( @RequestParam(value = "success", required = false) String success){
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("datosAltaUsuario", new DatosAltaUsuario());
@@ -32,10 +38,10 @@ public class ControladorAdmin {
             modelMap.addAttribute("exito", "El alta se creo correctamente");
         }
 
-        return new ModelAndView("admin/alta-usuario", modelMap);
+        return new ModelAndView("administrador/alta-usuario", modelMap);
     }
 
-    @RequestMapping(value = "registrar-paciente", method = RequestMethod.POST)
+    @RequestMapping(value = "/registrar-paciente", method = RequestMethod.POST)
     public ModelAndView registrarUsuario(DatosAltaUsuario datosAltaUsuario){
         try {
             this.servicioUsuario.altaUsuario(datosAltaUsuario);
@@ -43,9 +49,9 @@ public class ControladorAdmin {
         catch (RuntimeException e){
             ModelMap modelMap = new ModelMap();
             modelMap.addAttribute("errores", Arrays.asList(e.getMessage()));
-            return new ModelAndView("admin/alta-usuario", modelMap);
+            return new ModelAndView("administrador/alta-usuario", modelMap);
         }
 
-        return new ModelAndView("redirect:/admin/altas-usuario?success");
+        return new ModelAndView("redirect:/administrador/altas-usuario?success");
     }
 }
