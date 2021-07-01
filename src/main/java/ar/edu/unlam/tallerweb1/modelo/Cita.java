@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,10 +19,14 @@ public class Cita {
     @ManyToOne
     private Medico medico;
 
-    @OneToMany(mappedBy = "cita", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cita", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CitaHistoria> citaHistoriaList;
 
     private LocalDateTime fechaRegistro;
+
+    public Cita() {
+        this.citaHistoriaList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -61,5 +66,14 @@ public class Cita {
 
     public void setCitaHistoriaList(List<CitaHistoria> citaHistoriaList) {
         this.citaHistoriaList = citaHistoriaList;
+    }
+
+    public CitaHistoria getUltimaHistoria(){
+        return this.getCitaHistoriaList().get(this.getCitaHistoriaList().size() - 1);
+    }
+
+    public void agregarHistoria(CitaHistoria citaHistoria){
+        citaHistoria.setCita(this);
+        this.citaHistoriaList.add(citaHistoria);
     }
 }

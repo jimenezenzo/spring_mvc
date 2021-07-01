@@ -25,8 +25,8 @@
     </sec:authorize>
     <sec:authorize access="hasRole('Paciente')">
         <li class="nav-item">
-            <a class="nav-link" href="../index.html">
-                <i class="ni ni-tv-2 text-primary"></i> Dashboard
+            <a class="nav-link" href="${pageContext.request.contextPath}/paciente/citas/index">
+                <i class="ni ni-tv-2 text-primary"></i> Mis citas
             </a>
         </li>
     </sec:authorize>

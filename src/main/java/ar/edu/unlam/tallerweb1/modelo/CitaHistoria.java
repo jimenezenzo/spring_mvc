@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class CitaHistoria {
@@ -18,6 +19,8 @@ public class CitaHistoria {
     @ManyToOne()
     @JoinColumn(name = "cita_id")
     private Cita cita;
+
+    private LocalDateTime fechaRegistro;
 
     public Long getId() {
         return id;
@@ -49,5 +52,21 @@ public class CitaHistoria {
 
     public void setArchivo(String archivo) {
         this.archivo = archivo;
+    }
+
+    public Cita getCita() {
+        return cita;
+    }
+
+    public void setCita(Cita cita) {
+        this.cita = cita;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }

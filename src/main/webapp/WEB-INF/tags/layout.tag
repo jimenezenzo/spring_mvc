@@ -7,6 +7,9 @@
 --%>
 <%@tag description="Layout de las paginas" pageEncoding="UTF-8"%>
 <%@attribute name="title" fragment="true" %>
+<%@attribute name="style" fragment="true" required="false" %>
+<%@attribute name="script" fragment="true" required="false" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -28,6 +31,8 @@
     <link href="${pageContext.request.contextPath}/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href="${pageContext.request.contextPath}/assets/css/argon.css?v=1.0.0" rel="stylesheet">
+
+    <jsp:invoke fragment="style"/>
 </head>
 
 <body>
@@ -40,7 +45,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="../index.html">
-            <img src="${pageContext.request.contextPath}/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+            <img src="assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -73,7 +78,7 @@
                 <div class="row">
                     <div class="col-6 collapse-brand">
                         <a href="../index.html">
-                            <img src="${pageContext.request.contextPath}/assets/img/brand/blue.png">
+                            <img src="assets/img/brand/blue.png">
                         </a>
                     </div>
                     <div class="col-6 collapse-close">
@@ -157,6 +162,8 @@
 <script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Argon JS -->
 <script src="${pageContext.request.contextPath}/assets/js/argon.js?v=1.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<jsp:invoke fragment="script"/>
 </body>
 
 </html>
