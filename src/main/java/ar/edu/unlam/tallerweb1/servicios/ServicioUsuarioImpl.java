@@ -105,6 +105,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 			medico.setEmail(datosAltaUsuario.getEmail());
 			medico.setRol(datosAltaUsuario.getRol());
 			medico.setMatricula(datosAltaUsuario.getMatricula());
+			medico.setGuardia(false);
 			this.repositorioUsuario.registrarAltaUsuario(medico);
 		}
 	}

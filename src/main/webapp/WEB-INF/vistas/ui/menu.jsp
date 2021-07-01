@@ -31,14 +31,8 @@
     </sec:authorize>
     <sec:authorize access="hasRole('Paciente')">
         <li class="nav-item">
-            <a class="nav-link" href="../index.html">
-                <i class="ni ni-tv-2 text-primary"></i> Home
-            </a>
-            <a class="nav-link" href="../index.html">
+            <a class="nav-link" href="${pageContext.request.contextPath}/paciente/citas/index">
                 <i class="ni ni-tv-2 text-primary"></i> Mis citas
-            </a>
-            <a class="nav-link" href="../index.html">
-                <i class="ni ni-tv-2 text-primary"></i> Maps
             </a>
         </li>
     </sec:authorize>

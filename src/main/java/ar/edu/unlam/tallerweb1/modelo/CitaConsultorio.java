@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "citaConsultorio_id")
@@ -11,7 +14,7 @@ public class CitaConsultorio extends Cita{
 
     private LocalDate fecha;
 
-    private LocalDate hora;
+    private LocalTime hora;
 
     @ManyToOne
     private Especialidad especialidad;
@@ -24,11 +27,11 @@ public class CitaConsultorio extends Cita{
         this.fecha = fecha;
     }
 
-    public LocalDate getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(LocalDate hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 
@@ -38,5 +41,13 @@ public class CitaConsultorio extends Cita{
 
     public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
+    }
+
+    public String fechaFormateada(){
+        DateTimeFormatter esDateFormatLargo = DateTimeFormatter
+                .ofPattern("EEEE, dd 'de' MMMM 'de' yyyy")
+                .withLocale(new Locale("es", "AR"));
+
+        return fecha.format(esDateFormatLargo);
     }
 }
