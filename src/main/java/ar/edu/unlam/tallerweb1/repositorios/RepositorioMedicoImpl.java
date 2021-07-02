@@ -77,4 +77,9 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
                 .list();
     }
 
+    @Override
+    public List<CitaDomicilio> obtenerCitasDomicilioPorFechaMedicoId(Long idMedico, LocalDate fechaLocal) {
+        return null;
+    }
+
 }

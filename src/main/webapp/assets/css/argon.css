@@ -16127,6 +16127,11 @@ button.section-darker:focus
     height: 100vh !important;
 }
 
+.h-75vh{
+    height: 75vh; !important;
+}
+
+
 .row.row-grid > [class*='col-'] + [class*='col-']
 {
     margin-top: 3rem;

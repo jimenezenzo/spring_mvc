@@ -1,17 +1,17 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.modelo.Agenda;
-import ar.edu.unlam.tallerweb1.modelo.CitaConsultorio;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMedico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,4 +63,24 @@ public class ServicioMedicoImpl implements ServicioMedico{
     public List<Medico> obtenerMedicosTodos() {
         return this.repositorioMedico.obtenerTodosLosMedicos();
     }
+
+    @Override
+    public List<CitaDomicilio> obtenerCitasDomicilio(String username) {
+        Long idMedico = 0L;
+
+        for (Medico medicoi : obtenerMedicosTodos()) {
+            if (medicoi.getEmail().equals(username)){
+                idMedico = medicoi.getId();
+            }
+        }
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        dtf.format(LocalDateTime.now());
+
+        LocalDate fecha = LocalDate.now();
+
+
+        return repositorioMedico.obtenerCitasDomicilioPorFechaMedicoId(idMedico, fecha);
+    }
+
+
 }
