@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.modelo.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RepositorioMedico {
@@ -29,4 +30,8 @@ public interface RepositorioMedico {
     List<CitaDomicilio> obtenerCitasDomicilio(String username);
 
     List obtenerCitasConsultorio(String username);
+
+    List obtenerCitasConsultorioPorFecha(Medico medico, LocalDate now);
+
+    List obtenerCitasDomicilioPorFecha(Medico medico, LocalDateTime now);
 }

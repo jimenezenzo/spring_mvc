@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/medico")
 public class ControladorMedico {
@@ -29,9 +31,14 @@ public class ControladorMedico {
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHomeMedico()
+    public ModelAndView irAHomeMedico(Authentication authentication)
     {
-        return new ModelAndView("redirect:/medico/citas-consultorio");
+        ModelMap modelMap = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+        modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
+        modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+
+        return new ModelAndView("home/home-medico", modelMap);
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.POST)

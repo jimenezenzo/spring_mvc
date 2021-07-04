@@ -75,6 +75,28 @@ public class ServicioMedicoImpl implements ServicioMedico{
     }
 
     @Override
+    public List<Cita> obtenerCitasDelDia(String username) {
+        Medico medico = this.consultarMedicoPorEmail(username);
+        List citas;
+
+        if (medico.getGuardia()){
+            citas = new ArrayList<CitaDomicilio>();
+            citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
+        }
+        else{
+            citas = new ArrayList<CitaConsultorio>();
+            citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
+        }
+
+        return citas;
+    }
+
+    @Override
+    public Boolean getGuardia(String username) {
+        return this.consultarMedicoPorEmail(username).getGuardia();
+    }
+
+    @Override
     public List getAgenda(String username) {
         return repositorioMedico.obtenerAgenda(username);
     }
