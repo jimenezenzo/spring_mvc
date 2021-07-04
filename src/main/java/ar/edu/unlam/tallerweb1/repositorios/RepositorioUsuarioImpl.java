@@ -60,6 +60,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 		if (usuario instanceof Medico){
 			Agenda lunes = new Agenda();
 			lunes.setActivo(true);
+			lunes.setGuardia(false);
 			lunes.setHoraDesde(LocalTime.parse("08:00"));
 			lunes.setHoraHasta(LocalTime.parse("16:00"));
 			lunes.setDia("lunes");
@@ -68,6 +69,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda martes = new Agenda();
 			martes.setActivo(true);
+			martes.setGuardia(false);
 			martes.setHoraDesde(LocalTime.parse("08:00"));
 			martes.setHoraHasta(LocalTime.parse("16:00"));
 			martes.setDia("martes");
@@ -76,6 +78,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda miercoles = new Agenda();
 			miercoles.setActivo(true);
+			miercoles.setGuardia(false);
 			miercoles.setHoraDesde(LocalTime.parse("08:00"));
 			miercoles.setHoraHasta(LocalTime.parse("16:00"));
 			miercoles.setDia("miércoles");
@@ -84,6 +87,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda jueves = new Agenda();
 			jueves.setActivo(true);
+			jueves.setGuardia(false);
 			jueves.setHoraDesde(LocalTime.parse("08:00"));
 			jueves.setHoraHasta(LocalTime.parse("16:00"));
 			jueves.setDia("jueves");
@@ -92,6 +96,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda viernes = new Agenda();
 			viernes.setActivo(true);
+			viernes.setGuardia(false);
 			viernes.setHoraDesde(LocalTime.parse("08:00"));
 			viernes.setHoraHasta(LocalTime.parse("16:00"));
 			viernes.setDia("viernes");
@@ -100,6 +105,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda sabado = new Agenda();
 			sabado.setActivo(false);
+			sabado.setGuardia(false);
 			sabado.setHoraDesde(LocalTime.parse("08:00"));
 			sabado.setHoraHasta(LocalTime.parse("16:00"));
 			sabado.setDia("sábado");
@@ -108,6 +114,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
 			Agenda domingo = new Agenda();
 			domingo.setActivo(false);
+			domingo.setGuardia(false);
 			domingo.setHoraDesde(LocalTime.parse("08:00"));
 			domingo.setHoraHasta(LocalTime.parse("16:00"));
 			domingo.setDia("domingo");

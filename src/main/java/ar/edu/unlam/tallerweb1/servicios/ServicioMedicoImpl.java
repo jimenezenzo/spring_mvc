@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,7 +78,10 @@ public class ServicioMedicoImpl implements ServicioMedico{
         Medico medico = this.consultarMedicoPorEmail(username);
         List citas;
 
-        if (medico.getGuardia()){
+        String dia = this.formatearFecha(LocalDate.now().toString());
+
+        Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
+        if (agenda.getGuardia()){
             citas = new ArrayList<CitaDomicilio>();
             citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
         }
@@ -93,7 +95,13 @@ public class ServicioMedicoImpl implements ServicioMedico{
 
     @Override
     public Boolean getGuardia(String username) {
-        return this.consultarMedicoPorEmail(username).getGuardia();
+        Medico medico = this.consultarMedicoPorEmail(username);
+
+        String dia = this.formatearFecha(LocalDate.now().toString());
+
+        Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
+
+        return agenda.getGuardia();
     }
 
     @Override
@@ -110,7 +118,21 @@ public class ServicioMedicoImpl implements ServicioMedico{
             agenda.setActivo(true);
         }
 
+        if (agenda.getGuardia() == null) {
+            agenda.setGuardia(false);
+        } else {
+            agenda.setGuardia(true);
+        }
+
         this.repositorioMedico.actualizarAgenda(agenda);
+    }
+
+    private String formatearFecha(String fecha){
+        DateTimeFormatter formatoDia = DateTimeFormatter
+                .ofPattern("EEEE")
+                .withLocale(new Locale("es", "AR"));
+        LocalDate fechaLocal = LocalDate.parse(fecha);
+        return fechaLocal.format(formatoDia);
     }
 
     @Override
