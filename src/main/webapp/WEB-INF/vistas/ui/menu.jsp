@@ -24,7 +24,7 @@
             <a class="nav-link" href="../index.html">
                 <i class="ni ni-tv-2 text-primary"></i> Mis especialidades
             </a>
-            <a class="nav-link" href="../index.html">
+            <a class="nav-link" href="${pageContext.request.contextPath}/medico/mi-agenda">
                 <i class="ni ni-tv-2 text-primary"></i> Mi agenda
             </a>
         </li>

@@ -82,4 +82,30 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
         return null;
     }
 
+    @Override
+    public List obtenerAgenda(String username) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        Criteria criteria = session.createCriteria(Agenda.class).
+                createCriteria("medico")
+                .add(Restrictions.eq("email", username));
+
+        return criteria.list();
+    }
+
+    @Override
+    public void actualizarAgenda(Agenda agenda) {
+        final Session session = sessionFactory.getCurrentSession();
+        session.update(agenda);
+    }
+
+    @Override
+    public Medico obtenerMedicoPorEmail(String username) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        return (Medico) session.createCriteria(Medico.class)
+                .add(Restrictions.eq("email", username))
+                .uniqueResult();
+    }
+
 }

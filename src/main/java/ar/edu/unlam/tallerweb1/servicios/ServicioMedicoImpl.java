@@ -82,5 +82,26 @@ public class ServicioMedicoImpl implements ServicioMedico{
         return repositorioMedico.obtenerCitasDomicilioPorFechaMedicoId(idMedico, fecha);
     }
 
+    @Override
+    public List getAgenda(String username) {
+        return repositorioMedico.obtenerAgenda(username);
+    }
+
+    @Override
+    public void actualizarAgenda(Agenda agenda, String username) {
+        agenda.setMedico(this.consultarMedicoPorEmail(username));
+        if (agenda.getActivo() == null) {
+            agenda.setActivo(false);
+        } else {
+            agenda.setActivo(true);
+        }
+
+        this.repositorioMedico.actualizarAgenda(agenda);
+    }
+
+    @Override
+    public Medico consultarMedicoPorEmail(String username) {
+        return repositorioMedico.obtenerMedicoPorEmail(username);
+    }
 
 }

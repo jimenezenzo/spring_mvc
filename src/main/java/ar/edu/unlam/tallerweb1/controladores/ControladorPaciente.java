@@ -60,7 +60,6 @@ public class ControladorPaciente {
         List<String> errores = new ArrayList<>();
         User user = (User) authentication.getPrincipal();
         datosCita.setPaciente(user.getUsername());
-        datosCita.setTipoCita(1);
 
         if (result.hasErrors()){
             result.getFieldErrors().forEach(error -> {

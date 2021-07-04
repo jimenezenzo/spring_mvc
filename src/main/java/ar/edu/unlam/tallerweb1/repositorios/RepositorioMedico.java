@@ -3,7 +3,6 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.modelo.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface RepositorioMedico {
@@ -20,4 +19,10 @@ public interface RepositorioMedico {
     List<Medico> obtenerTodosLosMedicos();
 
     List<CitaDomicilio> obtenerCitasDomicilioPorFechaMedicoId(Long idMedico, LocalDate fechaLocal);
+
+    List obtenerAgenda(String username);
+
+    void actualizarAgenda(Agenda agenda);
+
+    Medico obtenerMedicoPorEmail(String username);
 }
