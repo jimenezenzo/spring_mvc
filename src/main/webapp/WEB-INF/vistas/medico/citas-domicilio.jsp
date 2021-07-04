@@ -37,6 +37,16 @@
                         <h3 class="mb-0">Mis citas</h3>
                     </div>
                     <div class="card-body">
+
+                        <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
+                            </li>
+                        </ul>
+
                         <c:choose>
                             <c:when test="${not empty citas}">
                                 <c:forEach items="${citas}" var="cita">
@@ -45,16 +55,11 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <h3 class="card-title text-uppercase mb-0">PEDIATRIA</h3>
+                                                        <%--<h3 class="card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>--%>
                                                         <p class="font-weight-bold text-muted mb-0">
-                                                            Paciente: ${cita.paciente.persona.nombre}<br>
-                                                            Fecha: ${cita.fechaRegistro} <br>
-                                                        </p>
-                                                    </div>
-                                                    <div class="col">
-                                                        <h3 class="card-title text-uppercase mb-0">Lugar</h3>
-                                                        <p class="font-weight-bold text-muted mb-0">
-                                                            prueba tipo cita <br>
+                                                            Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
+                                                            Sintomas: ${cita.sintomas} <br>
+                                                            Estado: ${cita.getUltimaHistoria().observacion}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
@@ -62,17 +67,6 @@
                                                             <i class="ni ni-calendar-grid-58"></i>
                                                         </div>
                                                     </div>
-                                                        <%-- <c:if test="${cita.tipoCita.descripcion == 'urgencia'}"> --%>
-
-                                                    <form method="post"
-                                                          action="${pageContext.request.contextPath}/medico/mapa/${cita.id}">
-                                                        <div class="col-auto">
-                                                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                                <button type="submit">Ver mapa</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                        <%-- </c:if> --%>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,15 +75,7 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-warning" role="alert">
-                                    <form method="post"
-                                          action="${pageContext.request.contextPath}/medico/mapa/1">
-                                        <div class="col-auto">
-                                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                <button type="submit">Ver mapa</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    No tienes citas.
+                                    No tienes citas a domicilio.
                                 </div>
                             </c:otherwise>
                         </c:choose>

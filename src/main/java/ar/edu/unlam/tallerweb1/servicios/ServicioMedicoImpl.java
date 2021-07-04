@@ -66,20 +66,12 @@ public class ServicioMedicoImpl implements ServicioMedico{
 
     @Override
     public List<CitaDomicilio> obtenerCitasDomicilio(String username) {
-        Long idMedico = 0L;
+       return this.repositorioMedico.obtenerCitasDomicilio(username);
+    }
 
-        for (Medico medicoi : obtenerMedicosTodos()) {
-            if (medicoi.getEmail().equals(username)){
-                idMedico = medicoi.getId();
-            }
-        }
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        dtf.format(LocalDateTime.now());
-
-        LocalDate fecha = LocalDate.now();
-
-
-        return repositorioMedico.obtenerCitasDomicilioPorFechaMedicoId(idMedico, fecha);
+    @Override
+    public List obtenerCitasConsultorio(String username) {
+        return this.repositorioMedico.obtenerCitasConsultorio(username);
     }
 
     @Override

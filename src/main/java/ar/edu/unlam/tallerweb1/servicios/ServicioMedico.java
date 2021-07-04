@@ -18,4 +18,6 @@ public interface ServicioMedico {
     void actualizarAgenda(Agenda agenda, String username);
 
     Medico consultarMedicoPorEmail(String username);
+
+    List obtenerCitasConsultorio(String username);
 }

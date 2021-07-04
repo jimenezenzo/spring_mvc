@@ -25,4 +25,8 @@ public interface RepositorioMedico {
     void actualizarAgenda(Agenda agenda);
 
     Medico obtenerMedicoPorEmail(String username);
+
+    List<CitaDomicilio> obtenerCitasDomicilio(String username);
+
+    List obtenerCitasConsultorio(String username);
 }

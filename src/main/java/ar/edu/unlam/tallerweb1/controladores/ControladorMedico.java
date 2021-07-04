@@ -1,9 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Agenda;
-import ar.edu.unlam.tallerweb1.modelo.Cita;
 import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCitaDomicilio;
 import ar.edu.unlam.tallerweb1.servicios.ServicioMedico;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +31,11 @@ public class ControladorMedico {
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHomeMedico()
     {
-        return new ModelAndView("medico/citas-del-dia");
+        return new ModelAndView("redirect:/medico/citas-consultorio");
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.POST)
     public ModelAndView mapaMedico(@PathVariable Long id){
-
 
         CitaDomicilio citaDomicilio = servicioCitaDomicilio.getCitaById(id);
 
@@ -52,14 +49,24 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapaMedico", model);
     }
 
-    @RequestMapping("/citas-del-dia")
-    public ModelAndView irAMisCitas(Authentication authentication) {
+    @RequestMapping("/citas-consultorio")
+    public ModelAndView irAMisCitasConsultorio(Authentication authentication) {
+        ModelMap model = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+
+        model.put("citas", servicioMedico.obtenerCitasConsultorio(user.getUsername()));
+
+        return new ModelAndView("medico/citas-consultorio", model);
+    }
+
+    @RequestMapping("/citas-domicilio")
+    public ModelAndView irAMisCitasDomicilio(Authentication authentication) {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
 
         model.put("citas", servicioMedico.obtenerCitasDomicilio(user.getUsername()));
 
-        return new ModelAndView("medico/citas-del-dia", model);
+        return new ModelAndView("medico/citas-domicilio", model);
     }
 
     @RequestMapping("/mi-agenda")
