@@ -39,7 +39,7 @@ public class ControladorMedico {
         return new ModelAndView("home/home-medico", modelMap);
     }
 
-    @RequestMapping(value = "/mapa/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
     public ModelAndView mapaMedico(@PathVariable Long id){
 
         CitaDomicilio citaDomicilio = servicioCitaDomicilio.getCitaById(id);

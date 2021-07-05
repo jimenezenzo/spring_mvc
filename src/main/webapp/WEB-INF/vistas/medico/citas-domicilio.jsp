@@ -64,7 +64,7 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                            <i class="ni ni-calendar-grid-58"></i>
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/medico/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
                                                         </div>
                                                     </div>
                                                 </div>
