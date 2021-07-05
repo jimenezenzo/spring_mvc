@@ -6,12 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
             var latitudObtenida = document.getElementById("latitud").innerHTML;
             var longuitudObtenida = document.getElementById("longitud").innerHTML;
 
-            var latitude = latitudObtenida;
-            var longitude = longuitudObtenida;
+            var latitudPaciente = position.coords.latitude;
+            var longitudpaciente = position.coords.longitude;
+
+            var latitudPaciente1 = latitudPaciente;
+            var longitudpaciente1 = longitudpaciente;
 
             //instanciar map
             var mymap = L.map('mapaMedico', {
-                center: [latitude, longitude],
+                center: [latitudObtenida, longuitudObtenida],
                 zoom: 12
             });
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -23,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
             //agregar ruta
             L.Routing.control({
                 waypoints: [
-                    L.latLng(latitude, longitude), //coordenadas del paciente
-                    L.latLng(-34.6699, -58.5622) //coordenadas del medico
+                    L.latLng(latitudObtenida, longuitudObtenida), //coordenadas del consultorio
+                    L.latLng(latitudPaciente1, longitudpaciente1) //coordenadas del paciente
                 ],
                 language: 'es'
             }).addTo(mymap);
