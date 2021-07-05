@@ -36,7 +36,13 @@ public class ControladorMedico {
         modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
         modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
 
-        return new ModelAndView("home/home-medico", modelMap);
+        if (this.servicioMedico.getGuardia(user.getUsername())){
+            return new ModelAndView("medico/citas-domicilio", modelMap);
+        }else{
+            return new ModelAndView("medico/citas-consultorio", modelMap);
+        }
+
+
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)

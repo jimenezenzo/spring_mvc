@@ -40,9 +40,6 @@
 
                         <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
                             </li>
                         </ul>
