@@ -1,10 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.excepciones.CrearCitaError;
-import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
-import ar.edu.unlam.tallerweb1.modelo.CitaHistoria;
-import ar.edu.unlam.tallerweb1.modelo.EstadoCita;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCitaDomicilio;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMedico;
@@ -18,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,14 +30,17 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
     private RepositorioCitaDomicilio repositorioCitaDomicilio;
     private RepositorioPaciente repositorioPaciente;
     private RepositorioMedico repositorioMedico;
+    private ServicioMedico servicioMedico;
 
     @Autowired
     public ServicioCitaDomicilioImpl(RepositorioCitaDomicilio repositorioCitaDomicilio, RestTemplate restTemplate,
-                                     RepositorioPaciente repositorioPaciente, RepositorioMedico repositorioMedico) {
+                                     RepositorioPaciente repositorioPaciente, RepositorioMedico repositorioMedico,
+                                     ServicioMedico servicioMedico) {
         this.repositorioCitaDomicilio = repositorioCitaDomicilio;
         this.restTemplate = restTemplate;
         this.repositorioPaciente = repositorioPaciente;
         this.repositorioMedico = repositorioMedico;
+        this.servicioMedico = servicioMedico;
     }
 
     @Override
@@ -100,9 +103,47 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
 
     //Obtiene el médico de guardia con menos citas pendientes
     private Medico obtenerMenosOcupado() {
-        List<Medico> medicos = repositorioMedico.obtenerTodosLosMedicos();
+        Agenda agendaHoy;
+        List<CitaDomicilio> citas;
+        String mejorOpcionEmail = "";
+        Integer cantCitas = 0;
 
-        return medicos.get(0);
+        // Obtengo todos los medicos
+        List<Medico> todos = repositorioMedico.obtenerTodosLosMedicos();
+        LocalTime horaActual = LocalDateTime.now().toLocalTime();
+
+        //Por cada médico
+        for (Medico medico: todos){
+            // Obtengo su agenda para hoy
+            agendaHoy = servicioMedico.getAgendaHoy(medico.getEmail());
+
+            // Si está de guardia
+            if (agendaHoy.getGuardia()) {
+
+                // Y la hora actual está dentro de su rango de guardia
+                if (agendaHoy.getHoraDesde().isBefore(horaActual) && agendaHoy.getHoraHasta().isAfter(horaActual)){
+
+                    // Obtengo todas las citas del médico
+                    citas = servicioMedico.obtenerCitasDomicilio(medico.getEmail());
+                    for (Cita cita : citas){
+                        for (CitaHistoria historia : cita.getCitaHistoriaList()){
+                            // Y descarto las citas CANCELADAS o FINALIZADAS
+                            if (historia.getEstado() != EstadoCita.CREADO){
+                                citas.remove(cita);
+                            }
+                        }
+                    }
+                    // Si la cantidad de citas pendientes son las menores hasta ahora
+                    if (citas.size() < cantCitas || cantCitas == 0){
+                        cantCitas = citas.size();
+                        //Me quedo con ese médico como el menos ocupado
+                        mejorOpcionEmail = medico.getEmail();
+                    }
+                }
+            }
+        }
+
+        return servicioMedico.consultarMedicoPorEmail(mejorOpcionEmail);
     }
 
 
