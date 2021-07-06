@@ -1,4 +1,10 @@
-
+<%--
+  Created by IntelliJ IDEA.
+  User: enzo-
+  Date: 7/6/2021
+  Time: 13:35
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -9,7 +15,7 @@
         Mis citas
     </jsp:attribute>
     <jsp:attribute name="script">
-        <script src="${pageContext.request.contextPath}/js/citas/createCita.js"></script>
+        <script src="${pageContext.request.contextPath}/js/citas/createCitaDomicilio.js"></script>
     </jsp:attribute>
     <jsp:body>
         <!-- Table -->
@@ -17,7 +23,7 @@
             <div class="col">
                 <div class="card shadow">
                     <div class="card-header border-0">
-                        <h3 class="mb-0">Nueva cita</h3>
+                        <h3 class="mb-0">Solicitud de médico a domicilio</h3>
                     </div>
                     <div class="card-body">
                         <div class="col-12">
@@ -32,19 +38,21 @@
                                 </div>
                             </c:if>
                         </div>
-                        <form:form action="${pageContext.request.contextPath}/paciente/citas/storeUrgencia" method="post" modelAttribute="datos">
+
+                        <form:form action="${pageContext.request.contextPath}/paciente/citas/storeCitaDomicilio" method="post" modelAttribute="datos">
                             <div class="form-group">
-                                <label for="selectEspecialidad">Especialidad</label>
-                                <form:select path="especialidad" id="selectEspecialidad" cssClass="form-control">
-                                    <option value="" disabled selected>Seleccione una especialidad</option>
-                                    <form:options items="${especialidades}" itemLabel="descripcion" itemValue="id" />
-                                </form:select>
+                                <textarea name="sintomas" rows="5" cols="30" placeholder="Ingrese síntomas"></textarea>
                             </div>
                             <div class="form-group">
-                                <form:textarea path = "detallesDePedidoDeUrgencia" rows = "5" cols = "30" cssClass="form-control" placeholder="Describa sus sintomas" />
+                                <label for="urgente" id="label_urg">Urgencia </label>
+                                <input type="checkbox" id="urgente" name="urgente">
                             </div>
+
+                            <input type="text" id="latitud" name="latitud" hidden>
+                            <input type="text" id="longitud" name="longitud" hidden>
+
                             <button class="btn btn-primary" type="submit">
-                                Solicitar urgencia
+                                Solicitar médico
                             </button>
                         </form:form>
                     </div>

@@ -90,6 +90,17 @@ public class ServicioMedicoImpl implements ServicioMedico{
     }
 
     @Override
+    public Agenda getAgendaHoy(String username){
+        Medico medico = this.consultarMedicoPorEmail(username);
+
+        String dia = this.formatearFecha(LocalDate.now().toString());
+
+        Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
+
+        return agenda;
+    }
+
+    @Override
     public List getAgenda(String username) {
         return repositorioMedico.obtenerAgenda(username);
     }

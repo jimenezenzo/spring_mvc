@@ -26,4 +26,7 @@ public interface ServicioMedico {
     List obtenerCitasDelDia(String username);
 
     Boolean getGuardia(String username);
+
+    Agenda getAgendaHoy(String username);
+
 }
