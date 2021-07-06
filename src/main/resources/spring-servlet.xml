@@ -28,4 +28,6 @@
     <!--Recursos para la plantilla argon-->
     <mvc:resources mapping="/assets/**" location="/assets/" />
 
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+
 </beans>

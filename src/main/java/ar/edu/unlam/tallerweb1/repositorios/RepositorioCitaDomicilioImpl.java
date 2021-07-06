@@ -21,4 +21,10 @@ public class RepositorioCitaDomicilioImpl implements RepositorioCitaDomicilio {
     public CitaDomicilio getCitaById(Long id) {
          return sessionFactory.getCurrentSession().get(CitaDomicilio.class, id);
     }
+
+    @Override
+    public void registrarCitaDomicilio(CitaDomicilio citaDomicilio){
+        sessionFactory.getCurrentSession().save(citaDomicilio);
+    }
+
 }
