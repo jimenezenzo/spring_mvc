@@ -41,7 +41,7 @@
 
                         <form:form action="${pageContext.request.contextPath}/paciente/citas/storeCitaDomicilio" method="post" modelAttribute="datos">
                             <div class="form-group">
-                                <textarea name="sintomas" rows="5" cols="30" placeholder="Ingrese síntomas"></textarea>
+                                <textarea name="sintomas" rows="5" cols="30" placeholder="Ingrese síntomas" class="form-control"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="urgente" id="label_urg">Urgencia </label>

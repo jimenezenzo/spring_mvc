@@ -38,11 +38,19 @@
                     </div>
                     <div class="card-body">
 
-                        <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
-                            </li>
-                        </ul>
+                        <c:if test="${citasDelDia}">
+                            <h2>Citas del dia en consultorio</h2>
+                        </c:if>
+                        <c:if test="${!citasDelDia}">
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
+                                </li>
+                            </ul>
+                        </c:if>
 
                         <c:choose>
                             <c:when test="${not empty citas}">

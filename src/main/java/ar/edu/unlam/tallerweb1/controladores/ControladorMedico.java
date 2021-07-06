@@ -35,14 +35,13 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
         modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
         modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+        modelMap.put("citasDelDia", true);
 
         if (this.servicioMedico.getGuardia(user.getUsername())){
             return new ModelAndView("medico/citas-domicilio", modelMap);
         }else{
             return new ModelAndView("medico/citas-consultorio", modelMap);
         }
-
-
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
@@ -66,6 +65,7 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
 
         model.put("citas", servicioMedico.obtenerCitasConsultorio(user.getUsername()));
+        model.put("citasDelDia", false);
 
         return new ModelAndView("medico/citas-consultorio", model);
     }
@@ -76,6 +76,7 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
 
         model.put("citas", servicioMedico.obtenerCitasDomicilio(user.getUsername()));
+        model.put("citasDelDia", false);
 
         return new ModelAndView("medico/citas-domicilio", model);
     }
