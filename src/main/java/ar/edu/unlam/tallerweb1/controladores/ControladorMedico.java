@@ -29,12 +29,23 @@ public class ControladorMedico {
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHomeMedico()
+    public ModelAndView irAHomeMedico(Authentication authentication)
     {
-        return new ModelAndView("redirect:/medico/citas-consultorio");
+        ModelMap modelMap = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+        modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
+        modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+
+        if (this.servicioMedico.getGuardia(user.getUsername())){
+            return new ModelAndView("medico/citas-domicilio", modelMap);
+        }else{
+            return new ModelAndView("medico/citas-consultorio", modelMap);
+        }
+
+
     }
 
-    @RequestMapping(value = "/mapa/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
     public ModelAndView mapaMedico(@PathVariable Long id){
 
         CitaDomicilio citaDomicilio = servicioCitaDomicilio.getCitaById(id);

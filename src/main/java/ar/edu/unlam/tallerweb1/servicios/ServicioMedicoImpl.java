@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,6 +74,37 @@ public class ServicioMedicoImpl implements ServicioMedico{
     }
 
     @Override
+    public List<Cita> obtenerCitasDelDia(String username) {
+        Medico medico = this.consultarMedicoPorEmail(username);
+        List citas;
+
+        String dia = this.formatearFecha(LocalDate.now().toString());
+
+        Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
+        if (agenda.getGuardia()){
+            citas = new ArrayList<CitaDomicilio>();
+            citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
+        }
+        else{
+            citas = new ArrayList<CitaConsultorio>();
+            citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
+        }
+
+        return citas;
+    }
+
+    @Override
+    public Boolean getGuardia(String username) {
+        Medico medico = this.consultarMedicoPorEmail(username);
+
+        String dia = this.formatearFecha(LocalDate.now().toString());
+
+        Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
+
+        return agenda.getGuardia();
+    }
+
+    @Override
     public List getAgenda(String username) {
         return repositorioMedico.obtenerAgenda(username);
     }
@@ -88,7 +118,21 @@ public class ServicioMedicoImpl implements ServicioMedico{
             agenda.setActivo(true);
         }
 
+        if (agenda.getGuardia() == null) {
+            agenda.setGuardia(false);
+        } else {
+            agenda.setGuardia(true);
+        }
+
         this.repositorioMedico.actualizarAgenda(agenda);
+    }
+
+    private String formatearFecha(String fecha){
+        DateTimeFormatter formatoDia = DateTimeFormatter
+                .ofPattern("EEEE")
+                .withLocale(new Locale("es", "AR"));
+        LocalDate fechaLocal = LocalDate.parse(fecha);
+        return fechaLocal.format(formatoDia);
     }
 
     @Override

@@ -41,7 +41,8 @@
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">Dia</th>
-                                            <th scope="col">Activo</th>
+                                            <th scope="col">Dia activo</th>
+                                            <th scope="col">Modo guardia</th>
                                             <th scope="col">Hora de inicio</th>
                                             <th scope="col">Hora de fin</th>
                                             <th scope="col">Accion</th>
@@ -55,6 +56,12 @@
                                                     <td>
                                                         <label class="custom-toggle">
                                                             <input type="checkbox" id="activo" name="activo" <c:if test="${agenda.activo}">checked</c:if> >
+                                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="custom-toggle">
+                                                            <input type="checkbox" id="guardia" name="guardia" <c:if test="${agenda.guardia}">checked</c:if> >
                                                             <span class="custom-toggle-slider rounded-circle"></span>
                                                         </label>
                                                     </td>

@@ -18,8 +18,8 @@
     </sec:authorize>
     <sec:authorize access="hasRole('Medico')">
         <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/medico/citas-consultorio">
-                <i class="ni ni-tv-2 text-primary"></i> Mis citas
+            <a class="nav-link" href="${pageContext.request.contextPath}/medico/home">
+                <i class="ni ni-tv-2 text-primary"></i> Home
             </a>
             <a class="nav-link" href="../index.html">
                 <i class="ni ni-tv-2 text-primary"></i> Mis especialidades

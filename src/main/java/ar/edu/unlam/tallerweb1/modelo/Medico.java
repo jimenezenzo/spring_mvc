@@ -14,8 +14,6 @@ public class Medico extends Usuario {
 
     private String matricula;
 
-    private Boolean guardia;
-
     @ManyToMany(mappedBy = "medicos")
     @JsonIgnore
     private List<Especialidad> especialidades;
@@ -37,14 +35,6 @@ public class Medico extends Usuario {
 
     public void setEspecialidades(List<Especialidad> especialidades) {
         this.especialidades = especialidades;
-    }
-
-    public Boolean getGuardia() {
-        return guardia;
-    }
-
-    public void setGuardia(Boolean guardia) {
-        this.guardia = guardia;
     }
 
     public Consultorio getConsultorio() {

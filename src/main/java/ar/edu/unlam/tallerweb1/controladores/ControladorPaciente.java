@@ -1,9 +1,12 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.CitaConsultorio;
+import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaConsultio;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCita;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCitaDomicilio;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCitaConsultorio;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,11 +30,13 @@ public class ControladorPaciente {
     private ServicioCita servicioCita;
     private ServicioCitaDomicilio servicioCitaDomicilio;
     private ServicioPaciente servicioPaciente;
+    private ServicioCitaConsultorio servicioCitaConsultorio;
 
     @Autowired
-    public  ControladorPaciente(ServicioCita servicioCita, ServicioPaciente servicioPaciente, ServicioCitaDomicilio servicioCitaDomicilio){
+    public  ControladorPaciente(ServicioCita servicioCita, ServicioPaciente servicioPaciente, ServicioCitaConsultorio servicioCitaConsultorio, ServicioCitaDomicilio servicioCitaDomicilio){
         this.servicioCita = servicioCita;
         this.servicioPaciente = servicioPaciente;
+        this.servicioCitaConsultorio = servicioCitaConsultorio;
         this.servicioCitaDomicilio = servicioCitaDomicilio;
     }
 
@@ -92,7 +98,6 @@ public class ControladorPaciente {
         return new ModelAndView("mis-citas/createCitaDomicilio", model);
     }
 
-
     @RequestMapping(value = "/citas/storeCitaDomicilio", method = RequestMethod.POST)
     public ModelAndView createCitaDomicilio(@Valid DatosCitaDomicilio datosCita, BindingResult result, Authentication authentication){
         ModelMap model = new ModelMap();
@@ -120,5 +125,19 @@ public class ControladorPaciente {
         return new ModelAndView("redirect:/paciente/citas/index");
     }
 
+    @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
+    public ModelAndView mapaMedico(@PathVariable Long id){
+
+        CitaConsultorio citaConsultorio = servicioCitaConsultorio.getCitaById(id);
+
+        Float latitud = citaConsultorio.getMedico().getConsultorio().getLatitud();
+        Float longitud = citaConsultorio.getMedico().getConsultorio().getLongitud();
+
+        ModelMap model = new ModelMap();
+        model.put("latitud", latitud);
+        model.put("longitud", longitud);
+
+        return new ModelAndView("maps/mapaMedico", model);
+    }
 
 }

@@ -58,13 +58,11 @@
                                                             <i class="ni ni-calendar-grid-58"></i>
                                                         </div>
                                                     </div>
-                                                    <%--<c:if test="${cita.tipoCita.id == 1}">
                                                         <div class="col-auto">
                                                             <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                                <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa_cita/${cita.id}"><i class="ni ni-pin-3"></a></i>
+                                                                <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
                                                             </div>
                                                         </div>
-                                                    </c:if>--%>
                                                 </div>
                                             </div>
                                         </div>

@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -123,6 +124,25 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
         return session.createCriteria(CitaConsultorio.class)
                 .createCriteria("medico")
                 .add(Restrictions.eq("email", username))
+                .list();
+    }
+
+    @Override
+    public List obtenerCitasConsultorioPorFecha(Medico medico, LocalDate fecha) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        return session.createCriteria(CitaConsultorio.class)
+                .add(Restrictions.eq("medico", medico))
+                .add(Restrictions.eq("fecha", fecha))
+                .list();
+    }
+
+    @Override
+    public List obtenerCitasDomicilioPorFecha(Medico medico, LocalDateTime fecha) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        return session.createCriteria(CitaDomicilio.class)
+                .add(Restrictions.eq("medico", medico))
                 .list();
     }
 

@@ -24,15 +24,11 @@
             <div class="col">
                 <div class="card shadow">
 
-                    <div id="latitud" >
+                    <div id="latitud" style="display: none" >
                             ${latitud}
                     </div>
-                    <div id="longitud">
+                    <div id="longitud" style="display: none">
                             ${longitud}
-                    </div>
-
-                    <div class="card-header border-0">
-                        <h3 class="mb-0">Hoja de ruta medico</h3>
                     </div>
                     <div class="card-body">
                         <div id="mapaMedico" class="h-100vh"></div>

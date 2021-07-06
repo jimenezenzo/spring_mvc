@@ -12,6 +12,7 @@ public class Agenda {
     private Medico medico;
     private String dia;
     private Boolean activo;
+    private Boolean guardia;
     private LocalTime horaHasta;
     private LocalTime horaDesde;
 
@@ -61,5 +62,13 @@ public class Agenda {
 
     public void setHoraDesde(LocalTime horaDesde) {
         this.horaDesde = horaDesde;
+    }
+
+    public Boolean getGuardia() {
+        return guardia;
+    }
+
+    public void setGuardia(Boolean guardia) {
+        this.guardia = guardia;
     }
 }
