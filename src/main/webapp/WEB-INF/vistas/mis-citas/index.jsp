@@ -26,14 +26,14 @@
                             <div class="col-12 d-flex">
                                 <div class="col-6 col-md-3 mb-2">
                                     <a href="${pageContext.request.contextPath}/paciente/citas/create" class="btn btn-primary">
-                                        Nueva cita
+                                        Nueva cita en consultorio
                                     </a>
                                 </div>
-                                <%--<div class="col-6 col-md-3">
-                                    <a href="${pageContext.request.contextPath}/paciente/citas/createUrgencia" class="btn btn-primary">
-                                        Urgencia
+                                <div class="col-6 col-md-3">
+                                    <a href="${pageContext.request.contextPath}/paciente/citas/createDomicilio" class="btn btn-primary">
+                                        Solicitar Médico a domicilio
                                     </a>
-                                </div>--%>
+                                </div>
                             </div>
                         </div>
 

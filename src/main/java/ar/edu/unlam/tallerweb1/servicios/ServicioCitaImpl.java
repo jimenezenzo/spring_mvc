@@ -1,12 +1,15 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.excepciones.CrearCitaError;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaConsultio;
+import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCita;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMedico;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -21,6 +24,8 @@ import java.util.Locale;
 @Service
 @Transactional
 public class ServicioCitaImpl implements ServicioCita {
+
+
 
     private RepositorioPaciente repositorioPaciente;
     private RepositorioCita repositorioCita;
@@ -103,8 +108,12 @@ public class ServicioCitaImpl implements ServicioCita {
         this.repositorioCita.registrarCitaConsultorio(citaConsultorio);
     }
 
+
     @Override
     public List medicosByEspecialidad(Long idEspecialidad) {
         return repositorioCita.medicoByEspecialidad(idEspecialidad);
     }
+
+
+
 }
