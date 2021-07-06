@@ -6,15 +6,15 @@ import ar.edu.unlam.tallerweb1.repositorios.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.*;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-public class RepositorioPacienteTest extends SpringTest {
+public class RepositorioMedicoTest extends SpringTest {
 
     private RepositorioPaciente repositorioPaciente;
     private RepositorioUsuario repositorioUsuario;
@@ -30,11 +30,21 @@ public class RepositorioPacienteTest extends SpringTest {
     @Test
     @Transactional
     @Rollback
-    public void testQueUnPacientePuedaCrearUnaCitaProgramada(){
-        Paciente paciente = givenUnPaciente();
+    public void testQueUnMedicoPuedaVerSusCitasProgramadasDelDia(){
         Medico medico = givenUnMedico();
-        CitaConsultorio citaConsultorio = whenElPacienteCreaLacitaProgramada(paciente, medico);
-        thenLaCitaProgramadaSeCreaConExito(citaConsultorio, paciente, medico);
+        Paciente paciente = givenUnPaciente();
+        whenCreoLasCitasConsultorio(medico, paciente);
+        thenElMedicoPuedeVerSusCitasProgramadas(medico);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testQueUnMedicoPuedaVerSusCitasADomicilioDelDia(){
+        Medico medico = givenUnMedico();
+        Paciente paciente = givenUnPaciente();
+        whenCreoLasCitasADomicilio(medico, paciente);
+        thenElMedicoPuedeVerSusCitasADomicilio(medico);
     }
 
     private Medico givenUnMedico() {
@@ -89,25 +99,54 @@ public class RepositorioPacienteTest extends SpringTest {
         return paciente;
     }
 
-    private CitaConsultorio whenElPacienteCreaLacitaProgramada(Paciente paciente, Medico medico) {
+    private void whenCreoLasCitasConsultorio(Medico medico, Paciente paciente) {
         CitaConsultorio citaConsultorio = new CitaConsultorio();
-        citaConsultorio.setFechaRegistro(LocalDateTime.now());
-        citaConsultorio.setPaciente(paciente);
-        citaConsultorio.setMedico(medico);
         citaConsultorio.setEspecialidad(medico.getEspecialidades().get(0));
-        citaConsultorio.setFecha(LocalDate.parse("2021-06-30"));
-        citaConsultorio.setHora(LocalTime.parse("08:00"));
-
+        citaConsultorio.setFecha(LocalDate.parse("2021-07-06"));
+        citaConsultorio.setHora(LocalTime.parse("12:00"));
+        citaConsultorio.setFechaRegistro(LocalDateTime.now());
+        citaConsultorio.setMedico(medico);
+        citaConsultorio.setPaciente(paciente);
         this.repositorioPaciente.registrarCita(citaConsultorio);
 
-        return citaConsultorio;
+        CitaConsultorio citaConsultorio2 = new CitaConsultorio();
+        citaConsultorio.setEspecialidad(medico.getEspecialidades().get(0));
+        citaConsultorio.setFecha(LocalDate.parse("2021-07-06"));
+        citaConsultorio.setHora(LocalTime.parse("12:40"));
+        citaConsultorio.setFechaRegistro(LocalDateTime.now());
+        citaConsultorio.setMedico(medico);
+        citaConsultorio.setPaciente(paciente);
+        this.repositorioPaciente.registrarCita(citaConsultorio2);
     }
 
-    private void thenLaCitaProgramadaSeCreaConExito(CitaConsultorio citaConsultorio, Paciente paciente, Medico medico) {
-        List<Cita> citaList = this.repositorioPaciente.obtenerTodasLasCitas(paciente.getEmail());
-        assertThat(citaList).isNotEmpty();
-        assertThat(citaList.get(0)).isEqualTo(citaConsultorio);
-        assertThat(citaList.get(0).getPaciente()).isEqualTo(paciente);
-        assertThat(citaList.get(0).getMedico()).isEqualTo(medico);
+    private void whenCreoLasCitasADomicilio(Medico medico, Paciente paciente) {
+        CitaDomicilio citaDomicilio = new CitaDomicilio();
+        citaDomicilio.setLatitud(-34.676f);
+        citaDomicilio.setLongitud(-23.687f);
+        citaDomicilio.setFechaRegistro(LocalDateTime.now());
+        citaDomicilio.setPaciente(paciente);
+        citaDomicilio.setMedico(medico);
+        citaDomicilio.setSintomas("bla bla");
+        this.repositorioPaciente.registrarCita(citaDomicilio);
+
+        CitaDomicilio citaDomicilio2 = new CitaDomicilio();
+        citaDomicilio.setLatitud(-34.676f);
+        citaDomicilio.setLongitud(-23.687f);
+        citaDomicilio.setFechaRegistro(LocalDateTime.now());
+        citaDomicilio.setPaciente(paciente);
+        citaDomicilio.setMedico(medico);
+        citaDomicilio.setSintomas("bla bla2");
+        this.repositorioPaciente.registrarCita(citaDomicilio2);
+    }
+
+    private void thenElMedicoPuedeVerSusCitasProgramadas(Medico medico) {
+        List citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.parse("2021-07-06"));
+        assertThat(citas).isNotEmpty();
+        //assertThat(citas.size()).isEqualTo(2);
+    }
+
+    private void thenElMedicoPuedeVerSusCitasADomicilio(Medico medico) {
+        List citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
+        assertThat(citas).isNotEmpty();
     }
 }

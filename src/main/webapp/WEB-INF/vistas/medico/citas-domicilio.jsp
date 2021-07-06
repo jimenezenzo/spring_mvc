@@ -55,11 +55,11 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <%--<h3 class="card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>--%>
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
                                                             Sintomas: ${cita.sintomas} <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion}
+                                                            Estado: ${cita.getUltimaHistoria().observacion} <br>
+                                                                ${cita.getFechaRegistroFormateada()}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">

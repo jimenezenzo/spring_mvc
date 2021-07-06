@@ -77,7 +77,7 @@ public class ControladorPaciente {
         }
 
         try {
-            servicioCita.create(datosCita);
+            servicioCita.registrarCitaConsultorio(datosCita);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return new ModelAndView("mis-citas/create", model);

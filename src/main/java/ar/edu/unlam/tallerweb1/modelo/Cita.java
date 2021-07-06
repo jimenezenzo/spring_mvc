@@ -2,8 +2,10 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -75,5 +77,13 @@ public class Cita {
     public void agregarHistoria(CitaHistoria citaHistoria){
         citaHistoria.setCita(this);
         this.citaHistoriaList.add(citaHistoria);
+    }
+
+    public String getFechaRegistroFormateada(){
+        DateTimeFormatter esDateFormatLargo = DateTimeFormatter
+                .ofPattern("dd 'de' MMMM 'de' yyyy HH:mm")
+                .withLocale(new Locale("es", "AR"));
+
+        return this.fechaRegistro.format(esDateFormatLargo);
     }
 }
