@@ -4,7 +4,6 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMedico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,10 +33,9 @@ public class ServicioMedicoImpl implements ServicioMedico{
         }
 
         List<CitaConsultorio> citasDeLaFecha = this.repositorioMedico.obtenerCitasPorFechaMedicoId(medico, LocalDate.parse(fecha));
-        List<String> horariosNoDisponibles = new ArrayList<>();
-        for (CitaConsultorio c:citasDeLaFecha){
-            horariosNoDisponibles.add(c.getHora().toString());
-        }
+        List<String> horariosNoDisponibles = citasDeLaFecha.stream()
+                .map(cita -> cita.getHora().toString())
+                .collect(Collectors.toList());
 
         return this.crearIntervalos(agenda.getHoraDesde(), agenda.getHoraHasta(), horariosNoDisponibles);
     }
@@ -67,15 +65,12 @@ public class ServicioMedicoImpl implements ServicioMedico{
         Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
         if (agenda.getGuardia()){
             citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
-            citas = citas.stream()
+            return citas.stream()
                     .filter(cita -> cita.getFechaRegistro().toLocalDate().toString().equals(LocalDate.now().toString()))
                     .collect(Collectors.toList());
         }
-        else{
-            citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
-        }
 
-        return citas;
+        return this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
     }
 
     @Override
@@ -132,8 +127,8 @@ public class ServicioMedicoImpl implements ServicioMedico{
         DateTimeFormatter formatoDia = DateTimeFormatter
                 .ofPattern("EEEE")
                 .withLocale(new Locale("es", "AR"));
-        LocalDate fechaLocal = LocalDate.parse(fecha);
-        return fechaLocal.format(formatoDia);
+
+        return LocalDate.parse(fecha).format(formatoDia);
     }
 
     private List crearIntervalos(LocalTime intervaloInicial, LocalTime intervaloFinal, List horariosNoDisponibles){

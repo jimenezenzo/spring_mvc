@@ -142,7 +142,6 @@ public class RepositorioMedicoTest extends SpringTest {
     private void thenElMedicoPuedeVerSusCitasProgramadas(Medico medico) {
         List citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.parse("2021-07-06"));
         assertThat(citas).isNotEmpty();
-        //assertThat(citas.size()).isEqualTo(2);
     }
 
     private void thenElMedicoPuedeVerSusCitasADomicilio(Medico medico) {
