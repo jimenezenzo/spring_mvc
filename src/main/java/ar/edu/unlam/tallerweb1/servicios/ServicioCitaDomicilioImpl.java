@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.configuraciones.SortByDateTime;
 import ar.edu.unlam.tallerweb1.excepciones.CrearCitaError;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
@@ -16,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -85,9 +88,8 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
         citaDomicilio.setPaciente(this.repositorioPaciente.obtenerPacientePorEmail(datosCita.getEmailPaciente()));
 
         // Se determina el mejor médico para asistir al domicilio según coordenadas
-        //Medico med = obtenerMedicoProximo(datosCita.getLatitud(), datosCita.getLongitud());
-        Medico med = obtenerMenosOcupado();
-        citaDomicilio.setMedico(med);
+        DatosCitaDomicilio data = obtenerMenosOcupado(datosCita.getLatitud(), datosCita.getLongitud());
+        citaDomicilio.setMedico(data.getMedico());
 
         citaDomicilio.agregarHistoria(citaHistoria);
 
@@ -99,11 +101,14 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
     }
 
     //Obtiene el médico de guardia con menos citas pendientes
-    private Medico obtenerMenosOcupado() {
+    private DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, float lon_paciente) {
         Agenda agendaHoy;
         List<CitaDomicilio> citas;
-        String mejorOpcionEmail = "";
+        Medico mejorOpcion = new Medico();
+        DatosCitaDomicilio data = new DatosCitaDomicilio();
         Integer cantCitas = 0;
+        Long demoraTotal = 0L;
+        Long mejorTiempo = 0L;
 
         // Obtengo todos los medicos
         List<Medico> todos = repositorioMedico.obtenerTodosLosMedicos();
@@ -130,17 +135,60 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
                             }
                         }
                     }
-                    // Si la cantidad de citas pendientes son las menores hasta ahora
-                    if (citas.size() < cantCitas || cantCitas == 0){
-                        cantCitas = citas.size();
-                        //Me quedo con ese médico como el menos ocupado
-                        mejorOpcionEmail = medico.getEmail();
+
+                    //Ordeno citas por fecha/hora de registro
+                    citas.sort(new SortByDateTime());
+
+                    //Recorro las citas en orden cronológico y calculo el timepo total de viaje entre citas
+                    for (int i = 0; i < (citas.size()-1); i++){
+                        demoraTotal += tiempoDeViajeEntreCitas(citas.get(i).getLatitud(),
+                                                               citas.get(i).getLongitud(),
+                                                               citas.get(i+1).getLatitud(),
+                                                               citas.get(i+1).getLongitud());
+                    }
+                    // Sumo tiempo de viaje a la ubicación del paciente
+                    demoraTotal += tiempoDeViajeEntreCitas(citas.get(citas.size()-1).getLatitud(),
+                                                           citas.get(citas.size()-1).getLongitud(),
+                                                           lat_paciente, lon_paciente);
+
+                    // Si este es el mejor tiempo hasta ahora, lo tomo para devolverlo
+                    if (demoraTotal < mejorTiempo || mejorTiempo == 0L){
+                        mejorTiempo = demoraTotal;
+                        mejorOpcion = medico;
+                        demoraTotal = 0L; //Limpio variable para próximo médico
                     }
                 }
             }
         }
 
-        return servicioMedico.consultarMedicoPorEmail(mejorOpcionEmail);
+        data.setMedico(mejorOpcion);
+        data.setDemora(mejorTiempo);
+
+        return data;
+    }
+
+    private Long tiempoDeViajeEntreCitas(Float lat_ori, Float lon_ori, Float lat_des, Float lon_des ){
+        Long travelDurationTraffic = 0L;
+        final String uri = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=" + lat_ori + "," + lon_ori +
+                            "&wp.1=" + lat_des + "," + lon_des +
+                            "&avoid=minimizeTolls&ra=routeSummariesOnly&key=AtLKQPChPF7fjzgLfxwMc7ybQlYp35ziJznMf0EFCAHpsrhabrTjF6vNh4bib3zo";
+        String result = restTemplate.getForObject(uri, String.class);
+
+        JSONParser parser = new JSONParser();
+
+        try{
+            Object obj = parser.parse(result);
+            JSONObject objeto = (JSONObject)obj;
+            JSONArray resourceSets = (JSONArray) objeto.get("resourceSets");
+            objeto = (JSONObject) resourceSets.get(0);
+            JSONArray resources = (JSONArray) objeto.get("resources");
+            objeto = (JSONObject) resources.get(0);
+            travelDurationTraffic = (Long) objeto.get("travelDurationTraffic");
+        }catch(ParseException pe) {
+            return 0L;
+        }
+
+        return travelDurationTraffic;
     }
 
 
