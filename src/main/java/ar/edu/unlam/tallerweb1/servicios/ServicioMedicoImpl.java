@@ -28,7 +28,7 @@ public class ServicioMedicoImpl implements ServicioMedico{
         String dia = this.formatearFecha(fecha);
 
         Agenda agenda = this.repositorioMedico.getDiaAgenda(medico, dia);
-        if (!agenda.getActivo() || agenda.getGuardia()){
+        if (agenda == null || !agenda.getActivo() || agenda.getGuardia()){
             return Collections.emptyList();
         }
 
@@ -103,17 +103,9 @@ public class ServicioMedicoImpl implements ServicioMedico{
     @Override
     public void actualizarAgenda(Agenda agenda, String username) {
         agenda.setMedico(this.consultarMedicoPorEmail(username));
-        if (agenda.getActivo() == null) {
-            agenda.setActivo(false);
-        } else {
-            agenda.setActivo(true);
-        }
 
-        if (agenda.getGuardia() == null) {
-            agenda.setGuardia(false);
-        } else {
-            agenda.setGuardia(true);
-        }
+        agenda.setActivo(agenda.getActivo() != null);
+        agenda.setGuardia(agenda.getGuardia() != null);
 
         this.repositorioMedico.actualizarAgenda(agenda);
     }

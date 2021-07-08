@@ -59,7 +59,7 @@ public class ServicioMedicoTest {
     public void testQueNoHayHorariosDisponibles(){
         Medico medico = givenUsuarioMedico();
         List<Agenda> agenda = whenBuscoLaAgenda(medico.getEmail());
-        List<String> horariosDisponibles = whenBuscoLosHorariosDisponiblesLlenoPorGuardia(medico, agenda);
+        List<String> horariosDisponibles = whenBuscoLosHorariosDisponiblesLleno(medico, agenda);
         thenNoHayHorariosDisponibles(horariosDisponibles);
     }
 
@@ -67,7 +67,7 @@ public class ServicioMedicoTest {
     public void testQueNoHayHorariosDisponiblesPorQueElMedicoEstaDeGuardia(){
         Medico medico = givenUsuarioMedico();
         List<Agenda> agenda = whenBuscoLaAgenda(medico.getEmail());
-        List<String> horariosDisponibles = whenBuscoLosHorariosDisponiblesLleno(medico, agenda);
+        List<String> horariosDisponibles =  whenBuscoLosHorariosDisponiblesLlenoPorGuardia(medico, agenda);
         thenNoHayHorariosDisponibles(horariosDisponibles);
     }
 
