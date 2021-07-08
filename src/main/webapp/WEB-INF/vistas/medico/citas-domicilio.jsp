@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<
+
 
 <t:layout>
     <jsp:attribute name="title">
@@ -77,6 +77,11 @@
                                         </div>
                                     </div>
                                 </c:forEach>
+                                <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/mapa-citas-domicilio-todas" role="tab">Ver todas en el mapa</a>
+                                    </li>
+                                </ul>
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-warning" role="alert">

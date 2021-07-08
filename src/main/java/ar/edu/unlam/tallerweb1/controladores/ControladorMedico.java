@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/medico")
 public class ControladorMedico {
@@ -57,6 +59,18 @@ public class ControladorMedico {
         model.put("longitud", longitud);
 
         return new ModelAndView("maps/mapaMedico", model);
+    }
+
+    @RequestMapping("/mapa-citas-domicilio-todas")
+    public ModelAndView mapaMedicoTodas(Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        List<CitaDomicilio> citasDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
+
+        ModelMap model = new ModelMap();
+        model.put("citas", citasDomicilio);
+        model.put("cantidad", citasDomicilio.size());
+
+        return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
     }
 
     @RequestMapping("/citas-consultorio")
