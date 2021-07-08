@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo.datos;
 
+import ar.edu.unlam.tallerweb1.modelo.Medico;
+
 import javax.validation.constraints.NotNull;
 
 public class DatosCitaDomicilio {
@@ -10,6 +12,24 @@ public class DatosCitaDomicilio {
     private String emailPaciente;
     private Float latitud;
     private Float longitud;
+    private Medico medico;
+    private Long demora;
+
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
+    public Long getDemora() {
+        return demora;
+    }
+
+    public void setDemora(Long demora) {
+        this.demora = demora;
+    }
 
     public Float getLatitud() {
         return latitud;
