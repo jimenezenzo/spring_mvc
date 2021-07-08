@@ -38,11 +38,19 @@
                     </div>
                     <div class="card-body">
 
-                        <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
-                            </li>
-                        </ul>
+                        <c:if test="${citasDelDia}">
+                            <h2>Citas del dia a domicilio</h2>
+                        </c:if>
+                        <c:if test="${!citasDelDia}">
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
+                                </li>
+                            </ul>
+                        </c:if>
 
                         <c:choose>
                             <c:when test="${not empty citas}">
@@ -52,11 +60,11 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <%--<h3 class="card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>--%>
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
                                                             Sintomas: ${cita.sintomas} <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion}
+                                                            Estado: ${cita.getUltimaHistoria().observacion} <br>
+                                                                ${cita.getFechaRegistroFormateada()}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">

@@ -10,9 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,36 +25,21 @@ public class ServicioMedicoImpl implements ServicioMedico{
     }
 
     @Override
-    public List<String> getHorariosDia(Long medico, String fecha) {
-        DateTimeFormatter formatoDia = DateTimeFormatter
-                .ofPattern("EEEE")
-                .withLocale(new Locale("es", "AR"));
-        LocalDate fechaLocal = LocalDate.parse(fecha);
-        String dia = fechaLocal.format(formatoDia);
+    public List getHorariosDia(Long medico, String fecha) {
+        String dia = this.formatearFecha(fecha);
 
         Agenda agenda = this.repositorioMedico.getDiaAgenda(medico, dia);
-        List<String> intervalos = new ArrayList<>();
-        if (!agenda.getActivo()){
-            return intervalos;
+        if (!agenda.getActivo() || agenda.getGuardia()){
+            return Collections.emptyList();
         }
 
-        LocalTime interIni = agenda.getHoraDesde();
-        LocalTime interFin = agenda.getHoraHasta();
-        intervalos.add(interIni.toString());
-
-        List<CitaConsultorio> citasDeLaFecha = this.repositorioMedico.obtenerCitasPorFechaMedicoId(medico, fechaLocal);
+        List<CitaConsultorio> citasDeLaFecha = this.repositorioMedico.obtenerCitasPorFechaMedicoId(medico, LocalDate.parse(fecha));
         List<String> horariosNoDisponibles = new ArrayList<>();
         for (CitaConsultorio c:citasDeLaFecha){
             horariosNoDisponibles.add(c.getHora().toString());
         }
 
-        while (interIni.isBefore(interFin)){
-            interIni = interIni.plusMinutes(40);
-            if (!horariosNoDisponibles.contains(interIni.toString()))
-                intervalos.add(interIni.toString());
-        }
-
-        return intervalos;
+        return this.crearIntervalos(agenda.getHoraDesde(), agenda.getHoraHasta(), horariosNoDisponibles);
     }
 
     @Override
@@ -76,17 +60,18 @@ public class ServicioMedicoImpl implements ServicioMedico{
     @Override
     public List<Cita> obtenerCitasDelDia(String username) {
         Medico medico = this.consultarMedicoPorEmail(username);
-        List citas;
+        List<Cita> citas;
 
         String dia = this.formatearFecha(LocalDate.now().toString());
 
         Agenda agenda = this.repositorioMedico.getDiaAgenda(medico.getId(), dia);
         if (agenda.getGuardia()){
-            citas = new ArrayList<CitaDomicilio>();
             citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
+            citas = citas.stream()
+                    .filter(cita -> cita.getFechaRegistro().toLocalDate().toString().equals(LocalDate.now().toString()))
+                    .collect(Collectors.toList());
         }
         else{
-            citas = new ArrayList<CitaConsultorio>();
             citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
         }
 
@@ -138,6 +123,11 @@ public class ServicioMedicoImpl implements ServicioMedico{
         this.repositorioMedico.actualizarAgenda(agenda);
     }
 
+    @Override
+    public Medico consultarMedicoPorEmail(String username) {
+        return repositorioMedico.obtenerMedicoPorEmail(username);
+    }
+
     private String formatearFecha(String fecha){
         DateTimeFormatter formatoDia = DateTimeFormatter
                 .ofPattern("EEEE")
@@ -146,9 +136,16 @@ public class ServicioMedicoImpl implements ServicioMedico{
         return fechaLocal.format(formatoDia);
     }
 
-    @Override
-    public Medico consultarMedicoPorEmail(String username) {
-        return repositorioMedico.obtenerMedicoPorEmail(username);
-    }
+    private List crearIntervalos(LocalTime intervaloInicial, LocalTime intervaloFinal, List horariosNoDisponibles){
+        List<String> intervaloAgenda = new ArrayList<>();
 
+        while (intervaloInicial.isBefore(intervaloFinal)){
+            if (!horariosNoDisponibles.contains(intervaloInicial.toString()))
+                intervaloAgenda.add(intervaloInicial.toString());
+
+            intervaloInicial = intervaloInicial.plusMinutes(40);
+        }
+
+        return intervaloAgenda;
+    }
 }

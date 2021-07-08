@@ -50,7 +50,8 @@
                                                                 <p class="font-weight-bold text-muted mb-0">
                                                                     Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
                                                                     Sintomas: ${cita.sintomas} <br>
-                                                                    Estado: ${cita.getUltimaHistoria().observacion}
+                                                                    Estado: ${cita.getUltimaHistoria().observacion} <br>
+                                                                    ${cita.getFechaRegistroFormateada()}
                                                                 </p>
                                                             </div>
                                                             <div class="col-auto">
