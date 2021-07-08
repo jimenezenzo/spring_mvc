@@ -89,6 +89,9 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
 
         // Se determina el mejor médico para asistir al domicilio según coordenadas
         DatosCitaDomicilio data = obtenerMenosOcupado(datosCita.getLatitud(), datosCita.getLongitud());
+        if (data.getMedico() == null || data.getMedico().getId() == null)
+            throw new CrearCitaError("No hay médico de guardia disponible");
+
         citaDomicilio.setMedico(data.getMedico());
 
         citaDomicilio.agregarHistoria(citaHistoria);
@@ -101,7 +104,8 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
     }
 
     //Obtiene el médico de guardia con menos citas pendientes
-    private DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, float lon_paciente) {
+    @Override
+    public DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, float lon_paciente) {
         Agenda agendaHoy;
         List<CitaDomicilio> citas;
         Medico mejorOpcion = new Medico();

@@ -11,6 +11,8 @@ public interface ServicioCitaDomicilio {
 
     void createCitaDomicilio(DatosCitaDomicilio datosCita) throws CrearCitaError;
 
+    DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, float lon_paciente);
+
     Medico obtenerMedicoProximo(Float latitud, Float longitud);
 
 
