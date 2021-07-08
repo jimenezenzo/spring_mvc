@@ -17,8 +17,6 @@ import java.util.List;
 @Transactional
 public class ServicioCitaImpl implements ServicioCita {
 
-
-
     private RepositorioPaciente repositorioPaciente;
     private RepositorioCita repositorioCita;
     private RepositorioMedico repositorioMedico;
@@ -49,7 +47,6 @@ public class ServicioCitaImpl implements ServicioCita {
         this.repositorioCita.registrarCitaConsultorio(citaConsultorio);
     }
 
-
     @Override
     public List<Especialidad> allEspecialidades() {
         return repositorioCita.allEspecialidad();
@@ -59,7 +56,4 @@ public class ServicioCitaImpl implements ServicioCita {
     public List medicosByEspecialidad(Long idEspecialidad) {
         return repositorioCita.medicoByEspecialidad(idEspecialidad);
     }
-
-
-
 }
