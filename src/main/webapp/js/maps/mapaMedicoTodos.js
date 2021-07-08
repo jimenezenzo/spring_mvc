@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.geolocation.getCurrentPosition(function (position) {
             //coordenas de usuario
 
-            //debugger;
+            debugger;
 
             var latitudMedico = position.coords.latitude;
             var longitudMedico = position.coords.longitude;
@@ -50,12 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (i === 0){
                         return markerMedico;
                     }else {
-                        var indice = i + 1;
-                        var lat = "latitud_" + indice;
-                        var lon = "longitud_" + indice;
+                        //var indice = i + 1;
+                        var lat = "latitud_" + i;
+                        var lon = "longitud_" + i;
                         var latitudObtenida = document.getElementById(lat).innerHTML;
                         var longuitudObtenida = document.getElementById(lon).innerHTML;
-                        return new L.marker([latitudObtenida, longuitudObtenida]);
+                        var marker = new L.marker([latitudObtenida, longuitudObtenida]).bindPopup("Cita: " + i);
+                        return marker;
                     }
                 }
             }).addTo(mymap);
