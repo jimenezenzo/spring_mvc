@@ -18,9 +18,11 @@ public class ServicioMedicoImpl implements ServicioMedico{
 
     private RepositorioMedico repositorioMedico;
 
+
     @Autowired
     public ServicioMedicoImpl(RepositorioMedico repositorioMedico){
         this.repositorioMedico = repositorioMedico;
+
     }
 
     @Override
@@ -94,6 +96,8 @@ public class ServicioMedicoImpl implements ServicioMedico{
 
         return agenda;
     }
+
+
 
     @Override
     public List getAgenda(String username) {

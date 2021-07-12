@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:layout>
     <jsp:attribute name="title">
@@ -19,22 +20,22 @@
         <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
         <script src="${pageContext.request.contextPath}/js/maps/mapaMedicoCitasIndividuales.js"></script>
     </jsp:attribute>
-    <jsp:body>
-        <div class="row">
-            <div class="col">
-                <div class="card shadow">
+    <jsp:body><div class="row">
+        <div class="col">
+            <div class="card shadow">
 
-                    <div id="latitud" style="display: none" >
+                    <div id="latitud" style="display: none">
                             ${latitud}
                     </div>
                     <div id="longitud" style="display: none">
                             ${longitud}
                     </div>
-                    <div class="card-body">
-                        <div id="mapaMedicoCitasIndividuales" class="h-100vh"></div>
-                    </div>
+
+                <div class="card-body">
+                    <div id="mapaMedicoCitasIndividuales" class="h-100vh"></div>
                 </div>
             </div>
         </div>
+    </div>
     </jsp:body>
 </t:layout>

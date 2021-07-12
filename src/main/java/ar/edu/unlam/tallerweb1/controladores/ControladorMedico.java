@@ -46,6 +46,19 @@ public class ControladorMedico {
         }
     }
 
+    @RequestMapping(path = "/todas-las-citas-mapa", method = RequestMethod.GET)
+    public ModelAndView verTodasLasCitasEnElMapa(Authentication authentication){
+
+        ModelMap model = new ModelMap();
+
+        User user = (User) authentication.getPrincipal();
+
+        model.put("citas", servicioMedico.obtenerCitasDomicilio(user.getUsername()));
+
+        return new ModelAndView("maps/mapa-todas-las-citas-domicilio", model);
+
+    }
+
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
     public ModelAndView mapaMedico(@PathVariable Long id){
 
@@ -58,7 +71,7 @@ public class ControladorMedico {
         model.put("latitud", latitud);
         model.put("longitud", longitud);
 
-        return new ModelAndView("maps/mapaMedico", model);
+        return new ModelAndView("maps/mapa-citas-individuales", model);
     }
 
     @RequestMapping("/mapa-citas-domicilio-todas")

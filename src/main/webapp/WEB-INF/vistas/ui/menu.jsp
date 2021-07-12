@@ -24,8 +24,8 @@
             <a class="nav-link" href="${pageContext.request.contextPath}/medico/citas-consultorio">
                 <i class="ni ni-tv-2 text-primary"></i> Mis citas
             </a>
-            <a class="nav-link" href="../index.html">
-                <i class="ni ni-tv-2 text-primary"></i> Mis especialidades
+            <a class="nav-link" href="${pageContext.request.contextPath}/medico/todas-las-citas-mapa">
+                <i class="ni ni-tv-2 text-primary"></i> Todas las citas domicilio en mapa
             </a>
             <a class="nav-link" href="${pageContext.request.contextPath}/medico/mi-agenda">
                 <i class="ni ni-tv-2 text-primary"></i> Mi agenda
