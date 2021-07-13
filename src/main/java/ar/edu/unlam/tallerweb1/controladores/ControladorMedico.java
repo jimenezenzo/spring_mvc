@@ -1,20 +1,19 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Agenda;
-import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
+import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCitaDomicilio;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCitaHistoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioMedico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,31 +22,32 @@ public class ControladorMedico {
 
     ServicioCitaDomicilio servicioCitaDomicilio;
     ServicioMedico servicioMedico;
+    ServicioCitaHistoria servicioCitaHistoria;
 
     @Autowired
-    public ControladorMedico(ServicioCitaDomicilio servicioCitaDomicilio, ServicioMedico servicioMedico) {
+    public ControladorMedico(ServicioCitaDomicilio servicioCitaDomicilio, ServicioMedico servicioMedico, ServicioCitaHistoria servicioCitaHistoria) {
         this.servicioCitaDomicilio = servicioCitaDomicilio;
         this.servicioMedico = servicioMedico;
+        this.servicioCitaHistoria = servicioCitaHistoria;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHomeMedico(Authentication authentication)
-    {
+    public ModelAndView irAHomeMedico(Authentication authentication) {
         ModelMap modelMap = new ModelMap();
         User user = (User) authentication.getPrincipal();
         modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
         modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
         modelMap.put("citasDelDia", true);
 
-        if (this.servicioMedico.getGuardia(user.getUsername())){
+        if (this.servicioMedico.getGuardia(user.getUsername())) {
             return new ModelAndView("medico/citas-domicilio", modelMap);
-        }else{
+        } else {
             return new ModelAndView("medico/citas-consultorio", modelMap);
         }
     }
 
     @RequestMapping(path = "/todas-las-citas-mapa", method = RequestMethod.GET)
-    public ModelAndView verTodasLasCitasEnElMapa(Authentication authentication){
+    public ModelAndView verTodasLasCitasEnElMapa(Authentication authentication) {
 
         ModelMap model = new ModelMap();
 
@@ -59,8 +59,34 @@ public class ControladorMedico {
 
     }
 
+    @RequestMapping(path = "/formulario-observaciones/{idCita}", method = RequestMethod.GET)
+    public ModelAndView irACargarObservaciones(@PathVariable Long idCita) {
+
+        ModelMap model = new ModelMap();
+        model.put("idCita", idCita);
+
+        return new ModelAndView("medico/formularioObservaciones", model);
+
+    }
+
+    @RequestMapping(value = "/store-observaciones/{idCita}", method = RequestMethod.POST)
+    public ModelAndView cargarObservaciones(@PathVariable Long idCita, @ModelAttribute CitaHistoria citaHistoriai) {
+
+        CitaHistoria citaHistoria = servicioCitaHistoria.citaHistoriaById(idCita);
+
+        ModelMap model = new ModelMap();
+
+        model.put("datos", citaHistoriai);
+
+        citaHistoria.setObservacion(citaHistoriai.getObservacion());
+
+        servicioCitaHistoria.updateCitaHistoria(citaHistoria);
+
+        return new ModelAndView("medico/formularioObservaciones");
+    }
+
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
-    public ModelAndView mapaMedico(@PathVariable Long id){
+    public ModelAndView mapaMedico(@PathVariable Long id) {
 
         CitaDomicilio citaDomicilio = servicioCitaDomicilio.getCitaById(id);
 
@@ -75,7 +101,7 @@ public class ControladorMedico {
     }
 
     @RequestMapping("/mapa-citas-domicilio-todas")
-    public ModelAndView mapaMedicoTodas(Authentication authentication){
+    public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<CitaDomicilio> citasDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
 
@@ -90,33 +116,50 @@ public class ControladorMedico {
     public ModelAndView irAMisCitasConsultorio(Authentication authentication) {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
-
-        model.put("citas", servicioMedico.obtenerCitasConsultorio(user.getUsername()));
+        List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
+        List<CitaConsultorio> listaFiltrada = new ArrayList<>();
+        for (CitaConsultorio citaConsultorioi : listaCitaConsultorio) {
+            for (CitaHistoria citaHistoriai : citaConsultorioi.getCitaHistoriaList()) {
+                if (citaHistoriai.getObservacion().equals("Creado")) {
+                    listaFiltrada.add(citaConsultorioi);
+                }
+            }
+        }
+        model.put("citas", listaFiltrada);
         model.put("citasDelDia", false);
-
         return new ModelAndView("medico/citas-consultorio", model);
     }
 
+    /*si la observacion de la cita historia de la cita esta como "Creado" la muestra,
+     si el medico le carga la observacion real se carga en la bd y ya no la muestra
+    es el cierre de la cita*/
     @RequestMapping("/citas-domicilio")
     public ModelAndView irAMisCitasDomicilio(Authentication authentication) {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
-
-        model.put("citas", servicioMedico.obtenerCitasDomicilio(user.getUsername()));
+        List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
+        List<CitaDomicilio> listaFiltrada = new ArrayList<>();
+        for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
+            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+                if (citaHistoriai.getObservacion().equals("Creado")) {
+                    listaFiltrada.add(citaDomicilioi);
+                }
+            }
+        }
+        model.put("citas", listaFiltrada);
         model.put("citasDelDia", false);
-
         return new ModelAndView("medico/citas-domicilio", model);
     }
 
     @RequestMapping("/mi-agenda")
-    public ModelAndView irAMiAgenda(Authentication authentication, @RequestParam(value = "success", required = false) String success){
+    public ModelAndView irAMiAgenda(Authentication authentication, @RequestParam(value = "success", required = false) String success) {
         User user = (User) authentication.getPrincipal();
         ModelMap modelMap = new ModelMap();
 
         modelMap.addAttribute("agendas", this.servicioMedico.getAgenda(user.getUsername()));
         modelMap.addAttribute("objAgenda", new Agenda());
 
-        if (success != null){
+        if (success != null) {
             modelMap.addAttribute("estado", "Se actualizo correctamente el dia en la agenda");
         }
 
@@ -124,10 +167,9 @@ public class ControladorMedico {
     }
 
     @RequestMapping(value = "/actualizar-agenda", method = RequestMethod.POST)
-    public ModelAndView actualizarAgenda(Agenda agenda, Authentication authentication){
+    public ModelAndView actualizarAgenda(Agenda agenda, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         this.servicioMedico.actualizarAgenda(agenda, user.getUsername());
-
         return new ModelAndView("redirect:/medico/mi-agenda?success");
     }
 }

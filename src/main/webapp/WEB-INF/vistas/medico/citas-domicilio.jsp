@@ -49,15 +49,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
                                 </li>
-
-
                             </ul>
                         </c:if>
                         <c:choose>
                             <c:when test="${not empty citas}">
                                 <c:forEach items="${citas}" var="cita">
-                                    <div class="col-12 col-md-8 col-lg-10 mb-2">
-                                        <div class="card card-stats mb-4 mb-xl-0">
+
+                                        <div class="col-12 col-md-8 col-lg-10 mb-2">
+                                         <div class="card card-stats mb-4 mb-xl-0">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
@@ -72,11 +71,15 @@
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <a style="color:inherit" href="${pageContext.request.contextPath}/medico/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
                                                         </div>
+                                                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/medico/formulario-observaciones/${cita.id}"><i class="ni ni-ruler-pencil"></a></i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </c:forEach>
                                 <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
                                     <li class="nav-item">
