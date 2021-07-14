@@ -100,7 +100,8 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-citas-individuales", model);
     }
 
-    //este no deberia traer las citas que ya estan con observacion puesta por el medico
+    /*Solo muestra en el mapa citas domicilio que sean del dia y que no hayan sido cerradas
+    * por el medico con una observacion*/
     @RequestMapping("/mapa-citas-domicilio-todas")
     public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
