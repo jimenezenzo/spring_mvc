@@ -100,8 +100,7 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-citas-individuales", model);
     }
 
-    /*Solo muestra en el mapa citas domicilio que sean del dia y que no hayan sido cerradas
-    * por el medico con una observacion*/
+    
     @RequestMapping("/mapa-citas-domicilio-todas")
     public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -120,23 +119,13 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
     }
 
-    /*si la observacion de la cita historia de la cita esta como "Creado" la muestra,
-     si el medico le carga la observacion real se carga en la bd y ya no la muestra
-    es el cierre de la cita*/
     @RequestMapping("/citas-domicilio")
     public ModelAndView irAMisCitasDomicilio(Authentication authentication) {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
         List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
-        List<CitaDomicilio> listaFiltrada = new ArrayList<>();
-        for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
-                if (citaHistoriai.getObservacion().equals("Creado")) {
-                    listaFiltrada.add(citaDomicilioi);
-                }
-            }
-        }
-        model.put("citas", listaFiltrada);
+
+        model.put("citas", listaCitaDomicilio);
         model.put("citasDelDia", false);
         return new ModelAndView("medico/citas-domicilio", model);
     }
