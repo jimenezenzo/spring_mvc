@@ -100,34 +100,23 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-citas-individuales", model);
     }
 
+    //este no deberia traer las citas que ya estan con observacion puesta por el medico
     @RequestMapping("/mapa-citas-domicilio-todas")
     public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        List<CitaDomicilio> citasDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
-
         ModelMap model = new ModelMap();
-        model.put("citas", citasDomicilio);
-        model.put("cantidad", citasDomicilio.size());
-
-        return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
-    }
-
-    @RequestMapping("/citas-consultorio")
-    public ModelAndView irAMisCitasConsultorio(Authentication authentication) {
-        ModelMap model = new ModelMap();
-        User user = (User) authentication.getPrincipal();
-        List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
-        List<CitaConsultorio> listaFiltrada = new ArrayList<>();
-        for (CitaConsultorio citaConsultorioi : listaCitaConsultorio) {
-            for (CitaHistoria citaHistoriai : citaConsultorioi.getCitaHistoriaList()) {
+        List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDelDia(user.getUsername());
+        List<CitaDomicilio> listaFiltrada = new ArrayList<>();
+        for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
+            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (citaHistoriai.getObservacion().equals("Creado")) {
-                    listaFiltrada.add(citaConsultorioi);
+                    listaFiltrada.add(citaDomicilioi);
                 }
             }
         }
         model.put("citas", listaFiltrada);
-        model.put("citasDelDia", false);
-        return new ModelAndView("medico/citas-consultorio", model);
+        model.put("cantidad", listaFiltrada.size());
+        return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
     }
 
     /*si la observacion de la cita historia de la cita esta como "Creado" la muestra,
@@ -150,6 +139,26 @@ public class ControladorMedico {
         model.put("citasDelDia", false);
         return new ModelAndView("medico/citas-domicilio", model);
     }
+
+    @RequestMapping("/citas-consultorio")
+    public ModelAndView irAMisCitasConsultorio(Authentication authentication) {
+        ModelMap model = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+        List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
+        List<CitaConsultorio> listaFiltrada = new ArrayList<>();
+        for (CitaConsultorio citaConsultorioi : listaCitaConsultorio) {
+            for (CitaHistoria citaHistoriai : citaConsultorioi.getCitaHistoriaList()) {
+                if (citaHistoriai.getObservacion().equals("Creado")) {
+                    listaFiltrada.add(citaConsultorioi);
+                }
+            }
+        }
+        model.put("citas", listaFiltrada);
+        model.put("citasDelDia", false);
+        return new ModelAndView("medico/citas-consultorio", model);
+    }
+
+
 
     @RequestMapping("/mi-agenda")
     public ModelAndView irAMiAgenda(Authentication authentication, @RequestParam(value = "success", required = false) String success) {
