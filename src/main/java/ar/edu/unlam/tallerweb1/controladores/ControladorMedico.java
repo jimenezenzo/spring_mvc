@@ -35,16 +35,27 @@ public class ControladorMedico {
     public ModelAndView irAHomeMedico(Authentication authentication) {
         ModelMap modelMap = new ModelMap();
         User user = (User) authentication.getPrincipal();
-        modelMap.put("citas", this.servicioMedico.obtenerCitasDelDia(user.getUsername()));
-        modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
-        modelMap.put("citasDelDia", true);
 
         if (this.servicioMedico.getGuardia(user.getUsername())) {
+            List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
+            List<CitaDomicilio> listaFiltrada = getCitaDomiciliosFiltrada(listaCitaDomicilio);
+
+            modelMap.put("citas", listaFiltrada);
+            modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+            modelMap.put("citasDelDia", true);
+
             return new ModelAndView("medico/citas-domicilio", modelMap);
         } else {
+            List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
+            List<CitaConsultorio> listaFiltrada = getCitaConsultoriosFiltrada(listaCitaConsultorio);
+
+            modelMap.put("citas", listaFiltrada);
+            modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+            modelMap.put("citasDelDia", true);
             return new ModelAndView("medico/citas-consultorio", modelMap);
         }
     }
+
 
     @RequestMapping(path = "/todas-las-citas-mapa", method = RequestMethod.GET)
     public ModelAndView verTodasLasCitasEnElMapa(Authentication authentication) {
@@ -82,7 +93,7 @@ public class ControladorMedico {
 
         servicioCitaHistoria.updateCitaHistoria(citaHistoria);
 
-        return new ModelAndView("medico/formularioObservaciones");
+        return new ModelAndView("home/home-medico");
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
@@ -100,20 +111,13 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-citas-individuales", model);
     }
 
-    
+
     @RequestMapping("/mapa-citas-domicilio-todas")
     public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         ModelMap model = new ModelMap();
         List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDelDia(user.getUsername());
-        List<CitaDomicilio> listaFiltrada = new ArrayList<>();
-        for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
-                if (citaHistoriai.getObservacion().equals("Creado")) {
-                    listaFiltrada.add(citaDomicilioi);
-                }
-            }
-        }
+        List<CitaDomicilio> listaFiltrada = getCitaDomiciliosFiltrada(listaCitaDomicilio);
         model.put("citas", listaFiltrada);
         model.put("cantidad", listaFiltrada.size());
         return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
@@ -135,19 +139,11 @@ public class ControladorMedico {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
         List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
-        List<CitaConsultorio> listaFiltrada = new ArrayList<>();
-        for (CitaConsultorio citaConsultorioi : listaCitaConsultorio) {
-            for (CitaHistoria citaHistoriai : citaConsultorioi.getCitaHistoriaList()) {
-                if (citaHistoriai.getObservacion().equals("Creado")) {
-                    listaFiltrada.add(citaConsultorioi);
-                }
-            }
-        }
-        model.put("citas", listaFiltrada);
+
+        model.put("citas", listaCitaConsultorio);
         model.put("citasDelDia", false);
         return new ModelAndView("medico/citas-consultorio", model);
     }
-
 
 
     @RequestMapping("/mi-agenda")
@@ -170,5 +166,30 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
         this.servicioMedico.actualizarAgenda(agenda, user.getUsername());
         return new ModelAndView("redirect:/medico/mi-agenda?success");
+    }
+
+    private List<CitaDomicilio> getCitaDomiciliosFiltrada(List<CitaDomicilio> listaCitaDomicilio) {
+        List<CitaDomicilio> listaFiltrada = new ArrayList<>();
+
+        for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
+            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+                if (citaHistoriai.getObservacion().equals("Creado")) {
+                    listaFiltrada.add(citaDomicilioi);
+                }
+            }
+        }
+        return listaFiltrada;
+    }
+
+    private List<CitaConsultorio> getCitaConsultoriosFiltrada(List<CitaConsultorio> listaCitaConsultorio) {
+        List<CitaConsultorio> listaFiltrada = new ArrayList<>();
+        for (CitaConsultorio citaConsultorioi : listaCitaConsultorio) {
+            for (CitaHistoria citaHistoriai : citaConsultorioi.getCitaHistoriaList()) {
+                if (citaHistoriai.getObservacion().equals("Creado")) {
+                    listaFiltrada.add(citaConsultorioi);
+                }
+            }
+        }
+        return listaFiltrada;
     }
 }
