@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.CitaConsultorio;
 import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
+import ar.edu.unlam.tallerweb1.modelo.EstadoCita;
 import ar.edu.unlam.tallerweb1.modelo.Paciente;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioCita;
@@ -39,14 +40,15 @@ public class ServicioPacienteImpl implements ServicioPaciente {
     public List<DatosCitaDomicilio> getCitasDomicilioPend(String email){
         Paciente paciente = this.repositorioPaciente.obtenerPacientePorEmail(email);
         List<CitaDomicilio> citas = this.repositorioCita.obtenerCitasDomicilioPaciente(paciente);
-        List<DatosCitaDomicilio> citasReturn = new ArrayList<DatosCitaDomicilio>();
-        DatosCitaDomicilio datos = new DatosCitaDomicilio();
+        List<DatosCitaDomicilio> citasReturn = new ArrayList<>();
+        DatosCitaDomicilio datos;
 
         for (CitaDomicilio cita : citas){
-            if(cita.getUltimaHistoria().getObservacion().equals("Creado"))
+            if(cita.getUltimaHistoria().getEstado() == EstadoCita.CREADO) {
                 datos = cita.toDatosCitaDomicilio();
                 datos.setDemora(servicioCitaDomicilio.obtenerDemora(cita.getId()));
                 citasReturn.add(datos);
+            }
         }
 
         return citasReturn;

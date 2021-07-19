@@ -135,6 +135,22 @@ public class ControladorPaciente {
         return new ModelAndView("mis-citas/mis-citas-domicilio", model);
     }
 
+    @RequestMapping(value = "/citas/cancelar/{id}", method = RequestMethod.GET)
+    public ModelAndView cancelarCita(@PathVariable Long id, Authentication authentication){
+        List<String> errores = new ArrayList<>();
+        ModelMap model = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+        try {
+            servicioCitaDomicilio.cancelarCitaDomicilio(user.getUsername(), id);
+        } catch (Exception e) {
+            errores.add(e.getMessage());
+            model.addAttribute("errores", errores);
+            return new ModelAndView("mis-citas/mis-citas-domicilio", model);
+        }
+
+        return new ModelAndView("redirect:/paciente/citas/medicoDomicilio");
+    }
+
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
     public ModelAndView mapaMedico(@PathVariable Long id){
 

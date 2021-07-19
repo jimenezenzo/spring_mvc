@@ -44,6 +44,7 @@ public class RepositorioCitaImpl implements RepositorioCita{
 
         Criteria criteria = session.createCriteria(CitaConsultorio.class)
                 .add(Restrictions.eq("paciente", paciente))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .addOrder(Order.desc("fechaRegistro"));
 
         return criteria.list();
@@ -55,6 +56,7 @@ public class RepositorioCitaImpl implements RepositorioCita{
 
         Criteria criteria = session.createCriteria(CitaDomicilio.class)
                 .add(Restrictions.eq("paciente", paciente))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .addOrder(Order.desc("fechaRegistro"));
 
         return criteria.list();

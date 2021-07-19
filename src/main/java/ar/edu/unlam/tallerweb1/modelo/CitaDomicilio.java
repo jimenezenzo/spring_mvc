@@ -47,6 +47,7 @@ public class CitaDomicilio extends Cita{
         datos.setSintomas(this.sintomas);
         datos.setMedico(this.getMedico());
         datos.setEmailPaciente(this.getPaciente().getEmail());
+        datos.setId(this.getId());
 
         return datos;
     }

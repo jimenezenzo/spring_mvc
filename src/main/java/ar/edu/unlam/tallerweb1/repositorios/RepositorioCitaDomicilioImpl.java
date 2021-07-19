@@ -27,4 +27,9 @@ public class RepositorioCitaDomicilioImpl implements RepositorioCitaDomicilio {
         sessionFactory.getCurrentSession().save(citaDomicilio);
     }
 
+    @Override
+    public void actualizarCitaDomicilio(CitaDomicilio citaDomicilio){
+        sessionFactory.getCurrentSession().update(citaDomicilio);
+    }
+
 }
