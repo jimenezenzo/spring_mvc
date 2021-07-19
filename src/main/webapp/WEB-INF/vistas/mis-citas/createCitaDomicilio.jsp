@@ -29,7 +29,7 @@
                         <div class="col-12">
                             <c:if test="${not empty errores}">
                                 <div class="alert alert-danger" role="alert">
-                                    <p>Corrija los siguientes errores:</p>
+                                    <p>Errores:</p>
                                     <ul>
                                         <c:forEach items="${errores}" var="error">
                                             <li>${error}</li>

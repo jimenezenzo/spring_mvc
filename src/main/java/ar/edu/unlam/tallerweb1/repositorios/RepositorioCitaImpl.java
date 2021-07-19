@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
-import ar.edu.unlam.tallerweb1.modelo.CitaConsultorio;
-import ar.edu.unlam.tallerweb1.modelo.Especialidad;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
-import ar.edu.unlam.tallerweb1.modelo.Paciente;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,6 +43,17 @@ public class RepositorioCitaImpl implements RepositorioCita{
         final Session session = sessionFactory.getCurrentSession();
 
         Criteria criteria = session.createCriteria(CitaConsultorio.class)
+                .add(Restrictions.eq("paciente", paciente))
+                .addOrder(Order.desc("fechaRegistro"));
+
+        return criteria.list();
+    }
+
+    @Override
+    public List<CitaDomicilio> obtenerCitasDomicilioPaciente(Paciente paciente){
+        final Session session = sessionFactory.getCurrentSession();
+
+        Criteria criteria = session.createCriteria(CitaDomicilio.class)
                 .add(Restrictions.eq("paciente", paciente))
                 .addOrder(Order.desc("fechaRegistro"));
 

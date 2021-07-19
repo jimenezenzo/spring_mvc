@@ -194,5 +194,38 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
         return travelDurationTraffic;
     }
 
+    @Override
+    public Long obtenerDemora(Long idCita) {
+        Long demoraTotal = 0L;
+        List<CitaDomicilio> citas;
 
+        // Obtengo todas las citas del médico
+        citas = servicioMedico.obtenerCitasDomicilio(getCitaById(idCita).getMedico().getEmail());
+        for (Cita cita : citas){
+            for (CitaHistoria historia : cita.getCitaHistoriaList()){
+                // Y descarto las citas CANCELADAS o FINALIZADAS
+                if (historia.getEstado() != EstadoCita.CREADO){
+                    citas.remove(cita);
+                }
+            }
+        }
+
+        //Calculo el tiempo de demora de todas las citas hata llegar a la cita idCita
+        //Ordeno citas por fecha/hora de registro
+        citas.sort(new SortByDateTime());
+
+        //Recorro las citas en orden cronológico y calculo el timepo total de viaje entre citas
+        for (int i = 0; i < (citas.size()-1); i++){
+            demoraTotal += tiempoDeViajeEntreCitas(citas.get(i).getLatitud(),
+                    citas.get(i).getLongitud(),
+                    citas.get(i+1).getLatitud(),
+                    citas.get(i+1).getLongitud());
+
+            if (citas.get(i+1).getId().equals(idCita))
+                break;
+        }
+
+        return demoraTotal;
+
+    }
 }

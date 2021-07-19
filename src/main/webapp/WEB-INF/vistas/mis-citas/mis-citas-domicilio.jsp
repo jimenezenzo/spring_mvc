@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <t:layout>
     <jsp:attribute name="title">
@@ -19,14 +20,14 @@
             <div class="col">
                 <div class="card shadow">
                     <div class="card-header border-0">
-                        <h3 class="mb-0">Mis citas programadas en consultorio</h3>
+                        <h3 class="mb-0">Médico a domicilio solicitado</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 d-flex">
-                                <div class="col-6 col-md-3 mb-2">
-                                    <a href="${pageContext.request.contextPath}/paciente/citas/create" class="btn btn-primary">
-                                        Nueva cita en consultorio
+                                <div class="col-6 col-md-3">
+                                    <a href="${pageContext.request.contextPath}/paciente/citas/createDomicilio" class="btn btn-primary">
+                                        Solicitar Médico a domicilio
                                     </a>
                                 </div>
                             </div>
@@ -40,24 +41,18 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <h3 class="card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>
+                                                        <c:set var = "demora" value = "${cita.demora / 60}" />
+                                                        <h3 class="card-title text-uppercase mb-0">Demora: <fmt:formatNumber type = "number"  value = "${demora}" maxFractionDigits = "0"/> minutos</h3>
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Medico: ${cita.medico.persona.apellido} ${cita.medico.persona.nombre} <br>
-                                                            Fecha: ${cita.fechaFormateada()} <br>
-                                                            Hora: ${cita.hora.toString()}hs <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion}
+                                                            Síntomas: ${cita.sintomas}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                            <i class="ni ni-calendar-grid-58"></i>
+                                                            <i class="ni ni-ambulance"></i>
                                                         </div>
                                                     </div>
-                                                        <div class="col-auto">
-                                                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                                <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
-                                                            </div>
-                                                        </div>
                                                 </div>
                                             </div>
                                         </div>
