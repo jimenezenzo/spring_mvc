@@ -105,12 +105,11 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
 
     //Obtiene el médico de guardia con menos citas pendientes
     @Override
-    public DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, float lon_paciente) {
+    public DatosCitaDomicilio obtenerMenosOcupado(Float lat_paciente, Float lon_paciente) {
         Agenda agendaHoy;
         List<CitaDomicilio> citas;
         Medico mejorOpcion = new Medico();
         DatosCitaDomicilio data = new DatosCitaDomicilio();
-        Integer cantCitas = 0;
         Long demoraTotal = 0L;
         Long mejorTiempo = 0L;
 
@@ -124,7 +123,7 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
             agendaHoy = servicioMedico.getAgendaHoy(medico.getEmail());
 
             // Si está de guardia
-            if (agendaHoy.getGuardia()) {
+            if (agendaHoy.getGuardia() && agendaHoy.getActivo()) {
 
                 // Y la hora actual está dentro de su rango de guardia
                 if (agendaHoy.getHoraDesde().isBefore(horaActual) && agendaHoy.getHoraHasta().isAfter(horaActual)){
