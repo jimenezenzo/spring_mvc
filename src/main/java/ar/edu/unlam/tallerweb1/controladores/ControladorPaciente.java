@@ -42,7 +42,7 @@ public class ControladorPaciente {
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHomePaciente() {
-        return new ModelAndView("home/home-paciente");
+        return new ModelAndView("redirect:/paciente/citas/index");
     }
 
     @RequestMapping("/citas/index")
@@ -117,12 +117,22 @@ public class ControladorPaciente {
         try {
             servicioCitaDomicilio.createCitaDomicilio(datosCita);
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            errores.add(e.getMessage());
+            model.addAttribute("errores", errores);
             model.put("datos", datosCita);
             return new ModelAndView("mis-citas/createCitaDomicilio", model);
         }
 
-        return new ModelAndView("redirect:/paciente/citas/index");
+        return new ModelAndView("redirect:/paciente/citas/medicoDomicilio");
+    }
+
+    @RequestMapping("/citas/medicoDomicilio")
+    public ModelAndView irAMisCitasDomicilio(Authentication authentication) {
+        ModelMap model = new ModelMap();
+        User user = (User) authentication.getPrincipal();
+        model.put("citas", servicioPaciente.getCitasDomicilioPend(user.getUsername()));
+
+        return new ModelAndView("mis-citas/mis-citas-domicilio", model);
     }
 
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)

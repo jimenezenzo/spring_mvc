@@ -15,5 +15,6 @@ public interface ServicioCitaDomicilio {
 
     Medico obtenerMedicoProximo(Float latitud, Float longitud);
 
+    Long obtenerDemora(Long idCita);
 
 }

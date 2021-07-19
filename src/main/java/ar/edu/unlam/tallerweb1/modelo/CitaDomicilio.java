@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
+
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -36,4 +38,19 @@ public class CitaDomicilio extends Cita{
     public void setSintomas(String sintomas) {
         this.sintomas = sintomas;
     }
+
+    public DatosCitaDomicilio toDatosCitaDomicilio(){
+        DatosCitaDomicilio datos = new DatosCitaDomicilio();
+
+        datos.setLatitud(this.latitud);
+        datos.setLongitud(this.longitud);
+        datos.setSintomas(this.sintomas);
+        datos.setMedico(this.getMedico());
+        datos.setEmailPaciente(this.getPaciente().getEmail());
+
+        return datos;
+    }
+
+
+
 }
