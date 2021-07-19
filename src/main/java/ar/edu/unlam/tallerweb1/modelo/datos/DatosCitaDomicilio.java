@@ -14,6 +14,15 @@ public class DatosCitaDomicilio {
     private Float longitud;
     private Medico medico;
     private Long demora;
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Medico getMedico() {
         return medico;

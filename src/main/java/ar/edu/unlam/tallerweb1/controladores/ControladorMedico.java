@@ -115,7 +115,7 @@ public class ControladorMedico {
     public ModelAndView mapaMedicoTodas(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         ModelMap model = new ModelMap();
-        List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDelDia(user.getUsername());
+        List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
         List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);
         model.put("citas", listaFiltrada);
         model.put("cantidad", listaFiltrada.size());
@@ -176,11 +176,13 @@ public class ControladorMedico {
         List<CitaDomicilio> listaFiltrada = new ArrayList<>();
 
         for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+            /*for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (citaHistoriai.getObservacion().equals("Creado")) {
                     listaFiltrada.add(citaDomicilioi);
                 }
-            }
+            }*/
+            if (citaDomicilioi.getUltimaHistoria().getEstado() == EstadoCita.CREADO)
+                listaFiltrada.add(citaDomicilioi);
         }
         return listaFiltrada;
     }
@@ -189,11 +191,13 @@ public class ControladorMedico {
         List<CitaDomicilio> listaFiltrada = new ArrayList<>();
 
         for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+            /*for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (!citaHistoriai.getObservacion().equals("Creado")) {
                     listaFiltrada.add(citaDomicilioi);
                 }
-            }
+            }*/
+            if (citaDomicilioi.getUltimaHistoria().getEstado() != EstadoCita.CREADO)
+                listaFiltrada.add(citaDomicilioi);
         }
         return listaFiltrada;
     }

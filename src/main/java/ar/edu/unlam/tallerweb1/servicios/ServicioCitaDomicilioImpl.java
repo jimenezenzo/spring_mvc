@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.configuraciones.SortByDateTime;
+import ar.edu.unlam.tallerweb1.excepciones.CancelarCitaDomicilioError;
 import ar.edu.unlam.tallerweb1.excepciones.CrearCitaError;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.modelo.datos.DatosCitaDomicilio;
@@ -148,6 +149,7 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
                                                                citas.get(i).getLongitud(),
                                                                citas.get(i+1).getLatitud(),
                                                                citas.get(i+1).getLongitud());
+                        demoraTotal += 1200;
                     }
                     // Sumo tiempo de viaje a la ubicación del paciente
                     demoraTotal += tiempoDeViajeEntreCitas(citas.get(citas.size()-1).getLatitud(),
@@ -198,34 +200,60 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
     public Long obtenerDemora(Long idCita) {
         Long demoraTotal = 0L;
         List<CitaDomicilio> citas;
+        List<CitaDomicilio> citasValidas = new ArrayList<>();
 
         // Obtengo todas las citas del médico
         citas = servicioMedico.obtenerCitasDomicilio(getCitaById(idCita).getMedico().getEmail());
-        for (Cita cita : citas){
-            for (CitaHistoria historia : cita.getCitaHistoriaList()){
-                // Y descarto las citas CANCELADAS o FINALIZADAS
-                if (historia.getEstado() != EstadoCita.CREADO){
-                    citas.remove(cita);
-                }
+        for (CitaDomicilio cita : citas) {
+            // Y descarto las citas CANCELADAS o FINALIZADAS
+            if (cita.getUltimaHistoria().getEstado() == EstadoCita.CREADO) {
+                citasValidas.add(cita);
             }
         }
 
         //Calculo el tiempo de demora de todas las citas hata llegar a la cita idCita
         //Ordeno citas por fecha/hora de registro
-        citas.sort(new SortByDateTime());
+        citasValidas.sort(new SortByDateTime());
 
         //Recorro las citas en orden cronológico y calculo el timepo total de viaje entre citas
-        for (int i = 0; i < (citas.size()-1); i++){
-            demoraTotal += tiempoDeViajeEntreCitas(citas.get(i).getLatitud(),
-                    citas.get(i).getLongitud(),
-                    citas.get(i+1).getLatitud(),
-                    citas.get(i+1).getLongitud());
+        if (citasValidas.get(0).getId().equals(idCita))
+            for (int i = 0; i < (citasValidas.size()-1); i++){
+                demoraTotal += 1200; //estimado 20 minutos para atender
+                demoraTotal += tiempoDeViajeEntreCitas(citasValidas.get(i).getLatitud(),
+                        citasValidas.get(i).getLongitud(),
+                        citasValidas.get(i+1).getLatitud(),
+                        citasValidas.get(i+1).getLongitud());
 
-            if (citas.get(i+1).getId().equals(idCita))
-                break;
-        }
+
+                if (citasValidas.get(i+1).getId().equals(idCita))
+                    break;
+            }
 
         return demoraTotal;
 
     }
+
+    @Override
+    public void cancelarCitaDomicilio(String mailPaciente, Long idCitaDom) throws CancelarCitaDomicilioError {
+
+        CitaDomicilio cita = getCitaById(idCitaDom);
+        if (cita == null || cita.getId() == null)
+            throw new CancelarCitaDomicilioError("La cita a cancelar no existe");
+        if (cita.getUltimaHistoria().getEstado() == EstadoCita.CANCELADO)
+            throw new CancelarCitaDomicilioError("La cita ya fue cancelada");
+        if (!cita.getPaciente().getEmail().equals(mailPaciente))
+            throw new CancelarCitaDomicilioError("La cita que desea cancelar no corresponde a su usuario");
+
+        CitaHistoria citaHistoria = new CitaHistoria();
+        citaHistoria.setEstado(EstadoCita.CANCELADO);
+        citaHistoria.setObservacion("El paciente cancela la solicitud");
+        citaHistoria.setFechaRegistro(LocalDateTime.now());
+
+        cita.agregarHistoria(citaHistoria);
+
+        this.repositorioCitaDomicilio.actualizarCitaDomicilio(cita);
+
+    }
+
+
 }

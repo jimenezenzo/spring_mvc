@@ -114,6 +114,7 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
         return session.createCriteria(CitaDomicilio.class)
                 .createCriteria("medico")
                 .add(Restrictions.eq("email", username))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
     }
 

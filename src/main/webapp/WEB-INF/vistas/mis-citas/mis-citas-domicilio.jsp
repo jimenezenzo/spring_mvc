@@ -22,6 +22,18 @@
                     <div class="card-header border-0">
                         <h3 class="mb-0">Médico a domicilio solicitado</h3>
                     </div>
+                    <div class="col-12">
+                        <c:if test="${not empty errores}">
+                            <div class="alert alert-danger" role="alert">
+                                <p>Errores:</p>
+                                <ul>
+                                    <c:forEach items="${errores}" var="error">
+                                        <li>${error}</li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 d-flex">
@@ -41,8 +53,13 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <c:set var = "demora" value = "${cita.demora / 60}" />
-                                                        <h3 class="card-title text-uppercase mb-0">Demora: <fmt:formatNumber type = "number"  value = "${demora}" maxFractionDigits = "0"/> minutos</h3>
+                                                        <c:if test="${cita.demora > 0}">
+                                                            <c:set var = "demora" value = "${cita.demora / 60}" />
+                                                            <h3 class="card-title text-uppercase mb-0">Demora: <fmt:formatNumber type = "number"  value = "${demora}" maxFractionDigits = "0"/> minutos</h3>
+                                                        </c:if>
+                                                        <c:if test="${cita.demora == 0}">
+                                                            <h3 class="card-title text-uppercase mb-0">El medico se está dirigiendo a su domicilio</h3>
+                                                        </c:if>
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Medico: ${cita.medico.persona.apellido} ${cita.medico.persona.nombre} <br>
                                                             Síntomas: ${cita.sintomas}
@@ -51,6 +68,11 @@
                                                     <div class="col-auto">
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <i class="ni ni-ambulance"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/citas/cancelar/${cita.id}"><i class="ni ni-fat-remove"></a></i>
                                                         </div>
                                                     </div>
                                                 </div>

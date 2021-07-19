@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import ar.edu.unlam.tallerweb1.configuraciones.SortByDateTimeHistorias;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -71,7 +73,9 @@ public class Cita {
     }
 
     public CitaHistoria getUltimaHistoria(){
-        return this.getCitaHistoriaList().get(this.getCitaHistoriaList().size() - 1);
+        List<CitaHistoria> historias = this.getCitaHistoriaList();
+        historias.sort(new SortByDateTimeHistorias());
+        return historias.get(historias.size() - 1);
     }
 
     public void agregarHistoria(CitaHistoria citaHistoria){
