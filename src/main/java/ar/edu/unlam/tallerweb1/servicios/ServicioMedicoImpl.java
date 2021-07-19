@@ -69,10 +69,14 @@ public class ServicioMedicoImpl implements ServicioMedico{
             citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
             return citas.stream()
                     .filter(cita -> cita.getFechaRegistro().toLocalDate().toString().equals(LocalDate.now().toString()))
+                    .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.CREADO))
                     .collect(Collectors.toList());
         }
 
-        return this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
+        citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
+        return citas.stream()
+                .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.CREADO))
+                .collect(Collectors.toList());
     }
 
     @Override

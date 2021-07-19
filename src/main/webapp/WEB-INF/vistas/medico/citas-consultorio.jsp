@@ -44,10 +44,10 @@
                         <c:if test="${!citasDelDia}">
                             <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas en domicilio</a>
+                                    <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas en domicilio</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en Consultorio</a>
+                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
                                 </li>
 
                             </ul>
@@ -66,10 +66,29 @@
                                                             Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
                                                             Fecha: ${cita.fechaFormateada()} <br>
                                                             Hora: ${cita.hora.toString()}hs <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'OBSERVADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-warning">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'FINALIZADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-success">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CANCELADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-danger">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <i class="ni ni-calendar-grid-58"></i>
                                                         </div>

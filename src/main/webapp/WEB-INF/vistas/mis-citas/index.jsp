@@ -44,20 +44,37 @@
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Medico: ${cita.medico.persona.apellido} ${cita.medico.persona.nombre} <br>
                                                             Fecha: ${cita.fechaFormateada()} <br>
-                                                            Hora: ${cita.hora.toString()}hs <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion}
+                                                            Hora: ${cita.hora.toString()}hs
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'OBSERVADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-warning">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'FINALIZADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-success">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CANCELADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-danger">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <i class="ni ni-calendar-grid-58"></i>
                                                         </div>
-                                                    </div>
-                                                        <div class="col-auto">
-                                                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                                <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
-                                                            </div>
+                                                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
                                                         </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

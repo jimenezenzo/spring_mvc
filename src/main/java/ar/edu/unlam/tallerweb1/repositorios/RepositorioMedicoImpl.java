@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,21 +112,24 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
     public List obtenerCitasDomicilio(String username) {
         final Session session = sessionFactory.getCurrentSession();
 
-        return session.createCriteria(CitaDomicilio.class)
+        Criteria criteria = session.createCriteria(CitaDomicilio.class)
+                .addOrder(Order.desc("fechaRegistro"))
                 .createCriteria("medico")
-                .add(Restrictions.eq("email", username))
-                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-                .list();
+                .add(Restrictions.eq("email", username));
+
+        return criteria.list();
     }
 
     @Override
     public List obtenerCitasConsultorio(String username) {
         final Session session = sessionFactory.getCurrentSession();
 
-        return session.createCriteria(CitaConsultorio.class)
+        Criteria criteria = session.createCriteria(CitaConsultorio.class)
+                .addOrder(Order.desc("fechaRegistro"))
                 .createCriteria("medico")
-                .add(Restrictions.eq("email", username))
-                .list();
+                .add(Restrictions.eq("email", username));
+
+        return criteria.list();
     }
 
     @Override

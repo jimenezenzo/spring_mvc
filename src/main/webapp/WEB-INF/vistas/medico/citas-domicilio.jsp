@@ -47,14 +47,18 @@
                                     <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-domicilio" role="tab">Citas a domicilio</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
+                                    <a class="nav-link mb-sm-3 mb-md-0" href="${pageContext.request.contextPath}/medico/citas-consultorio" role="tab">Citas en consultorio</a>
                                 </li>
                             </ul>
                         </c:if>
+
+                        <a class="btn btn-primary my-2" href="${pageContext.request.contextPath}/medico/mapa-citas-domicilio-todas" role="tab">
+                            <i class="ni ni-map-big"></i> Ver mapa
+                        </a>
+
                         <c:choose>
                             <c:when test="${not empty citas}">
                                 <c:forEach items="${citas}" var="cita">
-
                                         <div class="col-12 col-md-8 col-lg-10 mb-2">
                                          <div class="card card-stats mb-4 mb-xl-0">
                                             <div class="card-body">
@@ -63,11 +67,30 @@
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Paciente: ${cita.paciente.persona.apellido} ${cita.paciente.persona.nombre} <br>
                                                             Sintomas: ${cita.sintomas} <br>
-                                                            Estado: ${cita.getUltimaHistoria().observacion} <br>
                                                                 ${cita.getFechaRegistroFormateada()}
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'OBSERVADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-warning">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'FINALIZADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-success">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CANCELADO'}">
+                                                            <div class="w-100 mb-4">
+                                                                <span class="badge-md badge-pill badge-danger">${cita.getUltimaHistoria().estado}</span>
+                                                            </div>
+                                                        </c:if>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <a style="color:inherit" href="${pageContext.request.contextPath}/medico/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>
                                                         </div>
@@ -81,11 +104,6 @@
                                     </div>
 
                                 </c:forEach>
-                                <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-4" id="tabs-text" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0 active" href="${pageContext.request.contextPath}/medico/mapa-citas-domicilio-todas" role="tab">Ver todas en el mapa</a>
-                                    </li>
-                                </ul>
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-warning" role="alert">

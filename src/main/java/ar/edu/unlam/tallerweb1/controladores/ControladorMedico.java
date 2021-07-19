@@ -35,22 +35,15 @@ public class ControladorMedico {
         ModelMap modelMap = new ModelMap();
         User user = (User) authentication.getPrincipal();
 
-        if (this.servicioMedico.getGuardia(user.getUsername())) {
-            List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
-            List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);
+        modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
+        modelMap.put("citasDelDia", true);
+        modelMap.put("citas", servicioMedico.obtenerCitasDelDia(user.getUsername()));
 
-            modelMap.put("citas", listaFiltrada);
-            modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
-            modelMap.put("citasDelDia", true);
+        if (this.servicioMedico.getGuardia(user.getUsername())) {
 
             return new ModelAndView("medico/citas-domicilio", modelMap);
         } else {
-            List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
-            List<CitaConsultorio> listaFiltrada = citasConsultorioPendientes(listaCitaConsultorio);
 
-            modelMap.put("citas", listaFiltrada);
-            modelMap.put("modoGuardia", this.servicioMedico.getGuardia(user.getUsername()));
-            modelMap.put("citasDelDia", true);
             return new ModelAndView("medico/citas-consultorio", modelMap);
         }
     }
@@ -66,7 +59,6 @@ public class ControladorMedico {
         model.put("citas", servicioMedico.obtenerCitasDomicilio(user.getUsername()));
 
         return new ModelAndView("maps/mapa-todas-las-citas-domicilio", model);
-
     }
 
     @RequestMapping(path = "/formulario-observaciones/{idCita}", method = RequestMethod.GET)
@@ -76,7 +68,6 @@ public class ControladorMedico {
         model.put("idCita", idCita);
 
         return new ModelAndView("medico/formularioObservaciones", model);
-
     }
 
     @RequestMapping(value = "/store-observaciones/{idCita}", method = RequestMethod.POST)
@@ -127,10 +118,9 @@ public class ControladorMedico {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
         List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
+        /*List<CitaDomicilio> listaFiltrada = citasDomicilioFinalizadas(listaCitaDomicilio);*/
 
-        List<CitaDomicilio> listaFiltrada = citasDomicilioFinalizadas(listaCitaDomicilio);
-
-        model.put("citas", listaFiltrada);
+        model.put("citas", listaCitaDomicilio);
         model.put("citasDelDia", false);
         return new ModelAndView("medico/citas-domicilio", model);
     }
@@ -142,9 +132,9 @@ public class ControladorMedico {
         ModelMap model = new ModelMap();
         User user = (User) authentication.getPrincipal();
         List<CitaConsultorio> listaCitaConsultorio = servicioMedico.obtenerCitasConsultorio(user.getUsername());
-        List<CitaConsultorio> listaFiltrada = citasConsultorioFinalizadas(listaCitaConsultorio);
+        /*List<CitaConsultorio> listaFiltrada = citasConsultorioFinalizadas(listaCitaConsultorio);*/
 
-        model.put("citas", listaFiltrada);
+        model.put("citas", listaCitaConsultorio);
         model.put("citasDelDia", false);
         return new ModelAndView("medico/citas-consultorio", model);
     }
