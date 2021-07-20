@@ -30,28 +30,57 @@
 
                         <div class="d-flex mb-4">
                             <div class="w-50">
-                                <span>Nombre y apellido:</span> ${cita.paciente.persona.nombre} ${cita.paciente.persona.apellido}<br>
-                                <span>Sexo:</span> ${cita.paciente.persona.sexo}<br>
-                                <span>Documento:</span> ${cita.paciente.persona.tipoDocumento} ${cita.paciente.persona.numeroDocumento}<br>
-                                <span>Fecha de nacimiento:</span> ${cita.paciente.persona.fechaNacimiento.toString()}
+                                <span class="font-weight-bold">Nombre y apellido:</span> ${cita.paciente.persona.nombre} ${cita.paciente.persona.apellido}<br>
+                                <span class="font-weight-bold">Sexo:</span> ${cita.paciente.persona.sexo}<br>
+                                <span class="font-weight-bold">Documento:</span> ${cita.paciente.persona.tipoDocumento} ${cita.paciente.persona.numeroDocumento}<br>
+                                <span class="font-weight-bold">Fecha de nacimiento:</span> ${cita.paciente.persona.fechaFormato()}
                             </div>
                             <div class="w-50">
-                                <span>Fecha:</span> ${cita.fecha.toString()}<br>
-                                <span>Hora:</span> ${cita.hora.toString()}<br>
-                                <span>Consultorio:</span> ${cita.medico.consultorio.descripcion}<br>
-                                <span>Direccion:</span> ${cita.medico.consultorio.domicilio}
+                                <span class="font-weight-bold">Fecha:</span> ${cita.fechaFormateada()}<br>
+                                <span class="font-weight-bold">Hora:</span> ${cita.hora.toString()}<br>
+                                <span class="font-weight-bold">Consultorio:</span> ${cita.medico.consultorio.descripcion}<br>
+                                <span class="font-weight-bold">Direccion:</span> ${cita.medico.consultorio.domicilio}
                             </div>
                         </div>
 
                         <p class="badge-md badge-primary mb-2"><i class="ni ni-collection"></i> Historial </p>
                         <c:forEach items="${cita.citaHistoriaList}" var="historia">
-                            <div class="card border-default my-2">
-                                <div class="card-body">
-                                    <h5 class="card-title">${historia.estado}</h5>
-                                    <p class="card-text">${historia.observacion}</p>
-                                    <small>${historia.fechaRegistro}</small>
+                            <c:if test="${historia.estado == 'PENDIENTE'}">
+                                <div class="card border-default my-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><span class="badge-md badge-pill badge-info">${historia.estado}</span></h5>
+                                        <p class="card-text">${historia.observacion}</p>
+                                        <small class="text-muted">${historia.fechaFormato()}</small>
+                                    </div>
                                 </div>
-                            </div>
+                            </c:if>
+                            <c:if test="${historia.estado == 'OBSERVADO'}">
+                                <div class="card border-default my-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><span class="badge-md badge-pill badge-warning">${historia.estado}</span></h5>
+                                        <p class="card-text">${historia.observacion}</p>
+                                        <small class="text-muted">${historia.fechaFormato()}</small>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${historia.estado == 'FINALIZADO'}">
+                                <div class="card border-default my-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><span class="badge-md badge-pill badge-success">${historia.estado}</span></h5>
+                                        <p class="card-text">${historia.observacion}</p>
+                                        <small class="text-muted">${historia.fechaFormato()}</small>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${historia.estado == 'CANCELADO'}">
+                                <div class="card border-default my-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><span class="badge-md badge-pill badge-danger">${historia.estado}</span></h5>
+                                        <p class="card-text">${historia.observacion}</p>
+                                        <small class="text-muted">${historia.fechaFormato()}</small>
+                                    </div>
+                                </div>
+                            </c:if>
                         </c:forEach>
 
                         <sec:authorize access="hasRole('Medico')">
@@ -60,6 +89,7 @@
                                     <textarea name="observacion" rows="5" cols="30" placeholder="Ingrese diagnostico" class="form-control"></textarea>
                                 </div>
                                 <div class="form-group w-25">
+
                                     <select name="estado" id="" class="form-control">
                                         <option value="observado" selected>Observar</option>
                                         <option value="finalizado">Finalizar</option>

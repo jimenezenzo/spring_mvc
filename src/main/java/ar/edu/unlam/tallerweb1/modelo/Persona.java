@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Persona {
@@ -72,46 +73,9 @@ public class Persona {
         this.sexo = sexo;
     }
 
-    /*public boolean chequearPersona(Persona persona){
-
-        boolean datosCorrectos = true;
-
-        if (    persona.getNumeroAfiliado().equals("") ||
-                persona.getNombre().equals("") ||
-                persona.getApellido().equals("") ||
-                persona.getEmail().equals("") ||
-                persona.getTipoDocumento().equals("") ||
-                persona.getNumeroDocumento().equals("")||
-                persona.getSexo().equals("")
-
-            )
-
-        {
-            datosCorrectos = false;
-        }
-
-        return datosCorrectos;
-
-    }*/
-
-
-    /*public FormularioPersona toFormularioPersona()
-    {
-        FormularioPersona formularioPersona = new FormularioPersona();
-        formularioPersona.setNumeroAfiliado(numeroAfiliado);
-        formularioPersona.setNombre(nombre);
-        formularioPersona.setApellido(apellido);
-        formularioPersona.setFechaNacimiento(fechaNacimiento);
-        formularioPersona.setNumeroDocumento(numeroDocumento);
-        formularioPersona.setTipoDocumento(tipoDocumento);
-        formularioPersona.setSexo(sexo);
-        formularioPersona.setMatricula(matricula);
-        formularioPersona.setEmail(email);
-
-
-        return formularioPersona;
-    }*/
-
-
+    public String fechaFormato(){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.fechaNacimiento.format(format);
+    }
 }
 
