@@ -80,7 +80,7 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
     @Override
     public void createCitaDomicilio(DatosCitaDomicilio datosCita) throws CrearCitaError {
         CitaHistoria citaHistoria = new CitaHistoria();
-        citaHistoria.setEstado(EstadoCita.CREADO);
+        citaHistoria.setEstado(EstadoCita.PENDIENTE);
         citaHistoria.setObservacion("Creado");
         citaHistoria.setFechaRegistro(LocalDateTime.now());
 
@@ -134,7 +134,7 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
                     for (Cita cita : citas){
                         for (CitaHistoria historia : cita.getCitaHistoriaList()){
                             // Y descarto las citas CANCELADAS o FINALIZADAS
-                            if (historia.getEstado() != EstadoCita.CREADO){
+                            if (historia.getEstado() != EstadoCita.PENDIENTE){
                                 citas.remove(cita);
                             }
                         }
@@ -206,7 +206,7 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
         citas = servicioMedico.obtenerCitasDomicilio(getCitaById(idCita).getMedico().getEmail());
         for (CitaDomicilio cita : citas) {
             // Y descarto las citas CANCELADAS o FINALIZADAS
-            if (cita.getUltimaHistoria().getEstado() == EstadoCita.CREADO) {
+            if (cita.getUltimaHistoria().getEstado() == EstadoCita.PENDIENTE) {
                 citasValidas.add(cita);
             }
         }

@@ -1,8 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.modelo.Agenda;
-import ar.edu.unlam.tallerweb1.modelo.CitaDomicilio;
-import ar.edu.unlam.tallerweb1.modelo.Medico;
+import ar.edu.unlam.tallerweb1.modelo.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,4 +27,5 @@ public interface ServicioMedico {
 
     Agenda getAgendaHoy(String username);
 
+    CitaConsultorio obtenerCitaConsultorioId(Long idCita);
 }

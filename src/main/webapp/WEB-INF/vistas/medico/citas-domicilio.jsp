@@ -71,7 +71,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'PENDIENTE'}">
                                                             <div class="w-100 mb-4">
                                                                 <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
                                                             </div>

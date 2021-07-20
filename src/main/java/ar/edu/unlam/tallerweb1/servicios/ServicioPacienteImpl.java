@@ -44,7 +44,7 @@ public class ServicioPacienteImpl implements ServicioPaciente {
         DatosCitaDomicilio datos;
 
         for (CitaDomicilio cita : citas){
-            if(cita.getUltimaHistoria().getEstado() == EstadoCita.CREADO) {
+            if(cita.getUltimaHistoria().getEstado() == EstadoCita.PENDIENTE) {
                 datos = cita.toDatosCitaDomicilio();
                 datos.setDemora(servicioCitaDomicilio.obtenerDemora(cita.getId()));
                 citasReturn.add(datos);

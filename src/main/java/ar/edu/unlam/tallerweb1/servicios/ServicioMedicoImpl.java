@@ -69,13 +69,13 @@ public class ServicioMedicoImpl implements ServicioMedico{
             citas = this.repositorioMedico.obtenerCitasDomicilioPorFecha(medico, LocalDateTime.now());
             return citas.stream()
                     .filter(cita -> cita.getFechaRegistro().toLocalDate().toString().equals(LocalDate.now().toString()))
-                    .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.CREADO))
+                    .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.PENDIENTE))
                     .collect(Collectors.toList());
         }
 
         citas = this.repositorioMedico.obtenerCitasConsultorioPorFecha(medico, LocalDate.now());
         return citas.stream()
-                .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.CREADO))
+                .filter(cita -> cita.getUltimaHistoria().getEstado().equals(EstadoCita.PENDIENTE))
                 .collect(Collectors.toList());
     }
 
@@ -101,6 +101,10 @@ public class ServicioMedicoImpl implements ServicioMedico{
         return agenda;
     }
 
+    @Override
+    public CitaConsultorio obtenerCitaConsultorioId(Long idCita) {
+        return this.repositorioMedico.obtenerCitaConsultorioId(idCita);
+    }
 
 
     @Override

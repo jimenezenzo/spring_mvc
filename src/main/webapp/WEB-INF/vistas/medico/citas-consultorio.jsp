@@ -69,7 +69,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'PENDIENTE'}">
                                                             <div class="w-100 mb-4">
                                                                 <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
                                                             </div>
@@ -93,7 +93,7 @@
                                                             <i class="ni ni-calendar-grid-58"></i>
                                                         </div>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/medico/formulario-observaciones/${cita.id}"><i class="ni ni-ruler-pencil"></a></i>
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/cita/consultorio/${cita.id}"><i class="ni ni-ruler-pencil"></a></i>
                                                         </div>
                                                     </div>
                                                 </div>

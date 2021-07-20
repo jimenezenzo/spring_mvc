@@ -34,4 +34,6 @@ public interface RepositorioMedico {
     List obtenerCitasConsultorioPorFecha(Medico medico, LocalDate now);
 
     List obtenerCitasDomicilioPorFecha(Medico medico, LocalDateTime now);
+
+    CitaConsultorio obtenerCitaConsultorioId(Long idCita);
 }

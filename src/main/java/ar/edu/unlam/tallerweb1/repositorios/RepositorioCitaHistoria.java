@@ -7,4 +7,6 @@ public interface RepositorioCitaHistoria {
     CitaHistoria citaHistoriaById(Long idCita);
 
     void updateCitaHistoria(CitaHistoria citaHistoria);
+
+    void guardarHistoria(CitaHistoria citaHistoria);
 }

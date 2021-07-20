@@ -6,4 +6,6 @@ public interface ServicioCitaHistoria {
     CitaHistoria citaHistoriaById(Long idCita);
 
     void updateCitaHistoria(CitaHistoria citaHistoria);
+
+    void observarCitaConsultorio(Long idCita, String observacion, String estado);
 }

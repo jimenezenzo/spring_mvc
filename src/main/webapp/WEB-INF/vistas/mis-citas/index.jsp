@@ -40,7 +40,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <h3 class="card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>
+                                                        <h3 class="h3 card-title text-uppercase mb-0">${cita.especialidad.descripcion}</h3>
                                                         <p class="font-weight-bold text-muted mb-0">
                                                             Medico: ${cita.medico.persona.apellido} ${cita.medico.persona.nombre} <br>
                                                             Fecha: ${cita.fechaFormateada()} <br>
@@ -48,7 +48,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <c:if test="${cita.getUltimaHistoria().estado == 'CREADO'}">
+                                                        <c:if test="${cita.getUltimaHistoria().estado == 'PENDIENTE'}">
                                                             <div class="w-100 mb-4">
                                                                 <span class="badge-md badge-pill badge-info">${cita.getUltimaHistoria().estado}</span>
                                                             </div>
@@ -69,7 +69,7 @@
                                                             </div>
                                                         </c:if>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                            <i class="ni ni-calendar-grid-58"></i>
+                                                            <a style="color:inherit" href="${pageContext.request.contextPath}/cita/consultorio/${cita.id}"><i class="ni ni-ruler-pencil"></a></i>
                                                         </div>
                                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                             <a style="color:inherit" href="${pageContext.request.contextPath}/paciente/mapa/${cita.id}"><i class="ni ni-pin-3"></a></i>

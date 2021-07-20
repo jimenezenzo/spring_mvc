@@ -2,8 +2,10 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -115,7 +117,9 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
         Criteria criteria = session.createCriteria(CitaDomicilio.class)
                 .addOrder(Order.desc("fechaRegistro"))
                 .createCriteria("medico")
-                .add(Restrictions.eq("email", username));
+                .add(Restrictions.eq("email", username))
+                .setFetchMode("citaHistoriaList", FetchMode.JOIN)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
         return criteria.list();
     }
@@ -127,7 +131,9 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
         Criteria criteria = session.createCriteria(CitaConsultorio.class)
                 .addOrder(Order.desc("fechaRegistro"))
                 .createCriteria("medico")
-                .add(Restrictions.eq("email", username));
+                .add(Restrictions.eq("email", username))
+                .setFetchMode("citaHistoriaList", FetchMode.JOIN)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
         return criteria.list();
     }
@@ -151,5 +157,11 @@ public class RepositorioMedicoImpl implements RepositorioMedico{
                 .list();
     }
 
+    @Override
+    public CitaConsultorio obtenerCitaConsultorioId(Long idCita) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        return session.get(CitaConsultorio.class, idCita);
+    }
 
 }

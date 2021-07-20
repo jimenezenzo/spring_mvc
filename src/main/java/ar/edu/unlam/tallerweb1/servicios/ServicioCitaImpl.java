@@ -31,7 +31,7 @@ public class ServicioCitaImpl implements ServicioCita {
     @Override
     public void registrarCitaConsultorio(DatosCitaConsultio datosCita) {
         CitaHistoria citaHistoria = new CitaHistoria();
-        citaHistoria.setEstado(EstadoCita.CREADO);
+        citaHistoria.setEstado(EstadoCita.PENDIENTE);
         citaHistoria.setObservacion("Creado");
         citaHistoria.setFechaRegistro(LocalDateTime.now());
 

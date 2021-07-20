@@ -61,31 +61,6 @@ public class ControladorMedico {
         return new ModelAndView("maps/mapa-todas-las-citas-domicilio", model);
     }
 
-    @RequestMapping(path = "/formulario-observaciones/{idCita}", method = RequestMethod.GET)
-    public ModelAndView irACargarObservaciones(@PathVariable Long idCita) {
-
-        ModelMap model = new ModelMap();
-        model.put("idCita", idCita);
-
-        return new ModelAndView("medico/formularioObservaciones", model);
-    }
-
-    @RequestMapping(value = "/store-observaciones/{idCita}", method = RequestMethod.POST)
-    public ModelAndView cargarObservaciones(@PathVariable Long idCita, @ModelAttribute CitaHistoria citaHistoriai) {
-
-        CitaHistoria citaHistoria = servicioCitaHistoria.citaHistoriaById(idCita);
-
-        ModelMap model = new ModelMap();
-
-        model.put("datos", citaHistoriai);
-
-        citaHistoria.setObservacion(citaHistoriai.getObservacion());
-
-        servicioCitaHistoria.updateCitaHistoria(citaHistoria);
-
-        return new ModelAndView("home/home-medico");
-    }
-
     @RequestMapping(value = "/mapa/{id}", method = RequestMethod.GET)
     public ModelAndView mapaMedico(@PathVariable Long id) {
 
@@ -107,9 +82,9 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
         ModelMap model = new ModelMap();
         List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
-        List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);
-        model.put("citas", listaFiltrada);
-        model.put("cantidad", listaFiltrada.size());
+        /*List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);*/
+        model.put("citas", listaCitaDomicilio);
+        model.put("cantidad", listaCitaDomicilio.size());
         return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
     }
 
@@ -166,12 +141,12 @@ public class ControladorMedico {
         List<CitaDomicilio> listaFiltrada = new ArrayList<>();
 
         for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            /*for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (citaHistoriai.getObservacion().equals("Creado")) {
                     listaFiltrada.add(citaDomicilioi);
                 }
-            }*/
-            if (citaDomicilioi.getUltimaHistoria().getEstado() == EstadoCita.CREADO)
+            }
+            if (citaDomicilioi.getUltimaHistoria().getEstado() == EstadoCita.PENDIENTE)
                 listaFiltrada.add(citaDomicilioi);
         }
         return listaFiltrada;
@@ -181,12 +156,12 @@ public class ControladorMedico {
         List<CitaDomicilio> listaFiltrada = new ArrayList<>();
 
         for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            /*for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (!citaHistoriai.getObservacion().equals("Creado")) {
                     listaFiltrada.add(citaDomicilioi);
                 }
-            }*/
-            if (citaDomicilioi.getUltimaHistoria().getEstado() != EstadoCita.CREADO)
+            }
+            if (citaDomicilioi.getUltimaHistoria().getEstado() != EstadoCita.PENDIENTE)
                 listaFiltrada.add(citaDomicilioi);
         }
         return listaFiltrada;

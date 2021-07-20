@@ -26,4 +26,9 @@ public class RepositorioCitaHistoriaImpl implements RepositorioCitaHistoria{
     public void updateCitaHistoria(CitaHistoria citaHistoria) {
         sessionFactory.getCurrentSession().update(citaHistoria);
     }
+
+    @Override
+    public void guardarHistoria(CitaHistoria citaHistoria) {
+        sessionFactory.getCurrentSession().save(citaHistoria);
+    }
 }
