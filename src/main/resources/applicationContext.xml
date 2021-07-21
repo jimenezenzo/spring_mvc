@@ -17,6 +17,9 @@
 
 	<import resource="classpath:hibernateContext.xml" />
 
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
 	<!--Se indica que la configuracion del MVC se hara utilizanbdo anotaciones-->
 	<mvc:annotation-driven />
 

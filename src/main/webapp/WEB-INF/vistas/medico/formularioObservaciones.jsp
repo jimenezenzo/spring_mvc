@@ -19,7 +19,6 @@
         <script src="${pageContext.request.contextPath}/js/citas/createCitaDomicilio.js"></script>
     </jsp:attribute>
     <jsp:body>
-        <!-- Table -->
         <div class="row">
             <div class="col">
                 <div class="card shadow">
@@ -45,60 +44,62 @@
 
                         <p class="badge-md badge-primary mb-2"><i class="ni ni-collection"></i> Historial </p>
                         <c:forEach items="${cita.citaHistoriaList}" var="historia">
-                            <c:if test="${historia.estado == 'PENDIENTE'}">
-                                <div class="card border-default my-2">
-                                    <div class="card-body">
+                            <div class="card border-default my-2">
+                                <div class="card-body">
+                                    <c:if test="${historia.estado == 'PENDIENTE'}">
                                         <h5 class="card-title"><span class="badge-md badge-pill badge-info">${historia.estado}</span></h5>
-                                        <p class="card-text">${historia.observacion}</p>
-                                        <small class="text-muted">${historia.fechaFormato()}</small>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${historia.estado == 'OBSERVADO'}">
-                                <div class="card border-default my-2">
-                                    <div class="card-body">
+                                    </c:if>
+                                    <c:if test="${historia.estado == 'OBSERVADO'}">
                                         <h5 class="card-title"><span class="badge-md badge-pill badge-warning">${historia.estado}</span></h5>
-                                        <p class="card-text">${historia.observacion}</p>
-                                        <small class="text-muted">${historia.fechaFormato()}</small>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${historia.estado == 'FINALIZADO'}">
-                                <div class="card border-default my-2">
-                                    <div class="card-body">
+                                    </c:if>
+                                    <c:if test="${historia.estado == 'FINALIZADO'}">
                                         <h5 class="card-title"><span class="badge-md badge-pill badge-success">${historia.estado}</span></h5>
-                                        <p class="card-text">${historia.observacion}</p>
-                                        <small class="text-muted">${historia.fechaFormato()}</small>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${historia.estado == 'CANCELADO'}">
-                                <div class="card border-default my-2">
-                                    <div class="card-body">
+                                    </c:if>
+                                    <c:if test="${historia.estado == 'CANCELADO'}">
                                         <h5 class="card-title"><span class="badge-md badge-pill badge-danger">${historia.estado}</span></h5>
-                                        <p class="card-text">${historia.observacion}</p>
-                                        <small class="text-muted">${historia.fechaFormato()}</small>
-                                    </div>
+                                    </c:if>
+                                    <p class="card-text">${historia.observacion}</p>
+                                    <p><a href="${pageContext.request.contextPath}/cita/file/${historia.archivo}/descarga">${historia.archivo}</a></p>
+                                    <small class="text-muted">${historia.fechaFormato()}</small>
                                 </div>
-                            </c:if>
+                            </div>
                         </c:forEach>
 
+
+                        <sec:authorize access="hasRole('Paciente')">
+                            <c:if test="${cita.ultimaHistoria.estado == 'PENDIENTE'}">
+                                <form action="${pageContext.request.contextPath}/cita/consultorio/${idCita}/cancelar" method="post">
+                                    <div>
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="ni ni-scissors"></i> Cancelar turno
+                                        </button>
+                                    </div>
+                                </form>
+                            </c:if>
+                        </sec:authorize>
+
                         <sec:authorize access="hasRole('Medico')">
-                            <form:form action="${pageContext.request.contextPath}/cita/consultorio/${idCita}/accion" method="post" cssClass="mb-4">
+                            <form:form action="${pageContext.request.contextPath}/cita/consultorio/${idCita}/accion" method="post" enctype="multipart/form-data" modelAttribute="datosCitaHistoria" cssClass="my-4">
                                 <div class="form-group">
-                                    <textarea name="observacion" rows="5" cols="30" placeholder="Ingrese diagnostico" class="form-control"></textarea>
+                                    <label class="form-control-label" for="observacion">Observacion</label>
+                                    <form:textarea  id="observacion" rows="5" cols="30" class="form-control" path="observacion"></form:textarea>
                                 </div>
-                                <div class="form-group w-25">
-
-                                    <select name="estado" id="" class="form-control">
-                                        <option value="observado" selected>Observar</option>
-                                        <option value="finalizado">Finalizar</option>
-                                        <option value="cancelado">Cancelar</option>
-                                    </select>
-                                </div>
-
                                 <div class="d-flex">
-                                    <button type="submit" value="observar" class="btn btn-primary">
+                                    <div class="form-group w-25 mr-2">
+                                        <label class="form-control-label" for="estado">Estado</label>
+                                        <form:select path="estado" id="estado" class="form-control">
+                                            <form:option value="observado" selected="">Observar</form:option>
+                                            <form:option value="finalizado">Finalizar</form:option>
+                                            <form:option value="cancelado">Cancelar</form:option>
+                                        </form:select>
+                                    </div>
+                                    <div class="form-group w-50">
+                                        <label class="form-control-label" for="file">Archivo</label>
+                                        <form:input type="file" id="file" class="form-control" path="file" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">
                                         <i class="ni ni-send"></i> Enviar
                                     </button>
                                 </div>
