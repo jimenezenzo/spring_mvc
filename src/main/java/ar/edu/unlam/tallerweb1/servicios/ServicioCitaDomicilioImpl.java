@@ -140,6 +140,12 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
                         }
                     }
 
+                    if (citas.size() == 0){ //Este médico no tiene citas, se asigna.
+                        data.setMedico(medico);
+                        data.setDemora(0L);
+                        return data;
+                    }
+
                     //Ordeno citas por fecha/hora de registro
                     citas.sort(new SortByDateTime());
 

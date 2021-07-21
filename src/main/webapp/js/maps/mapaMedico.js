@@ -30,8 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).addTo(mymap);
                 L.Routing.control({
                     waypoints: [
-                        L.latLng(latitudObtenida, longuitudObtenida), //coordenadas del paciente
-                        L.latLng(latitudMedico, longitudMedico) //coordenadas del consultorio
+                        L.latLng(latitudMedico, longitudMedico), //coordenadas del consultorio
+                        L.latLng(latitudObtenida, longuitudObtenida) //coordenadas del paciente
+
                     ],
                     language: 'es'
                 }).addTo(mymap);
