@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.configuraciones.SortByDateTime;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCitaDomicilio;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCitaHistoria;
@@ -82,9 +83,9 @@ public class ControladorMedico {
         User user = (User) authentication.getPrincipal();
         ModelMap model = new ModelMap();
         List<CitaDomicilio> listaCitaDomicilio = servicioMedico.obtenerCitasDomicilio(user.getUsername());
-        /*List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);*/
-        model.put("citas", listaCitaDomicilio);
-        model.put("cantidad", listaCitaDomicilio.size());
+        List<CitaDomicilio> listaFiltrada = citasDomicilioPendientes(listaCitaDomicilio);
+        model.put("citas", listaFiltrada);
+        model.put("cantidad", listaFiltrada.size());
         return new ModelAndView("maps/mapa-citas-domicilio-todas", model);
     }
 
@@ -141,14 +142,17 @@ public class ControladorMedico {
         List<CitaDomicilio> listaFiltrada = new ArrayList<>();
 
         for (CitaDomicilio citaDomicilioi : listaCitaDomicilio) {
-            for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
+            /*for (CitaHistoria citaHistoriai : citaDomicilioi.getCitaHistoriaList()) {
                 if (citaHistoriai.getObservacion().equals("Creado")) {
                     listaFiltrada.add(citaDomicilioi);
                 }
-            }
+            }*/
             if (citaDomicilioi.getUltimaHistoria().getEstado() == EstadoCita.PENDIENTE)
                 listaFiltrada.add(citaDomicilioi);
         }
+
+        listaFiltrada.sort(new SortByDateTime());
+
         return listaFiltrada;
     }
 
