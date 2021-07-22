@@ -222,18 +222,21 @@ public class ServicioCitaDomicilioImpl implements ServicioCitaDomicilio{
         citasValidas.sort(new SortByDateTime());
 
         //Recorro las citas en orden cronológico y calculo el timepo total de viaje entre citas
-        if (citasValidas.get(0).getId().equals(idCita))
-            for (int i = 0; i < (citasValidas.size()-1); i++){
-                demoraTotal += 1200; //estimado 20 minutos para atender
-                demoraTotal += tiempoDeViajeEntreCitas(citasValidas.get(i).getLatitud(),
-                        citasValidas.get(i).getLongitud(),
-                        citasValidas.get(i+1).getLatitud(),
-                        citasValidas.get(i+1).getLongitud());
+        if (citasValidas.get(0).getId().equals(idCita)){
+            return 0L;
+        }
+
+        for (int i = 0; i < (citasValidas.size()-1); i++){
+            demoraTotal += 1200; //estimado 20 minutos para atender
+            demoraTotal += tiempoDeViajeEntreCitas(citasValidas.get(i).getLatitud(),
+                    citasValidas.get(i).getLongitud(),
+                    citasValidas.get(i+1).getLatitud(),
+                    citasValidas.get(i+1).getLongitud());
 
 
-                if (citasValidas.get(i+1).getId().equals(idCita))
-                    break;
-            }
+            if (citasValidas.get(i+1).getId().equals(idCita))
+                break;
+        }
 
         return demoraTotal;
 
