@@ -45,7 +45,7 @@ public class CitaConsultorio extends Cita{
 
     public String fechaFormateada(){
         DateTimeFormatter esDateFormatLargo = DateTimeFormatter
-                .ofPattern("EEEE, dd 'de' MMMM 'de' yyyy")
+                .ofPattern("dd 'de' MMMM 'de' yyyy")
                 .withLocale(new Locale("es", "AR"));
 
         return fecha.format(esDateFormatLargo);

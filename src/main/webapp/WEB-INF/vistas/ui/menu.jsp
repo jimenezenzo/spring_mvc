@@ -22,22 +22,22 @@
                 <i class="ni ni-tv-2 text-primary"></i> Home
             </a>
             <a class="nav-link" href="${pageContext.request.contextPath}/medico/citas-consultorio">
-                <i class="ni ni-tv-2 text-primary"></i> Mis citas
+                <i class="ni ni-archive-2 text-primary"></i> Mis citas
             </a>
             <a class="nav-link" href="${pageContext.request.contextPath}/medico/mi-agenda">
-                <i class="ni ni-tv-2 text-primary"></i> Mi agenda
+                <i class="ni ni-calendar-grid-58 text-primary"></i> Mi agenda
             </a>
         </li>
     </sec:authorize>
     <sec:authorize access="hasRole('Paciente')">
         <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/paciente/citas/index">
-                <i class="ni ni-tv-2 text-primary"></i> Mis citas programadas
+                <i class="ni ni-watch-time text-primary"></i> Mis citas programadas
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="${pageContext.request.contextPath}/paciente/citas/medicoDomicilio">
-                <i class="ni ni-tv-2 text-primary"></i> Médico a domicilio
+                <i class="ni ni-ambulance text-primary"></i> Médico a domicilio
             </a>
         </li>
     </sec:authorize>
